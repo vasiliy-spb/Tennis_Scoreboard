@@ -6,7 +6,7 @@ public enum SetScoreValue {
     TWO,
     THREE,
     FOUR,
-    FIFE,
+    FIVE,
     SIX,
     SET;
 }
