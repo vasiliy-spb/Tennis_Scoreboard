@@ -10,8 +10,8 @@ public class Match {
     private final Player secondPlayer;
     private final MatchScore scores;
 
-    public Match(UUID id, Player firstPlayer, Player secondPlayer) {
-        this.id = id;
+    public Match(Player firstPlayer, Player secondPlayer) {
+        this.id = UUID.randomUUID();
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         this.scores = new MatchScore(id, new PlayerScore(), new PlayerScore());

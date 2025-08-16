@@ -8,10 +8,10 @@ import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
-        Player firstPlayer = new Player(new UUID(0, 31), "Первый");
-        Player secondPlayer = new Player(new UUID(0, 31), "Второй");
+        Player firstPlayer = new Player("Первый");
+        Player secondPlayer = new Player("Второй");
 
-        Match match = new Match(new UUID(0, 31), firstPlayer, secondPlayer);
+        Match match = new Match(firstPlayer, secondPlayer);
         match.showResult();
 
         Scanner scanner = new Scanner(System.in);
