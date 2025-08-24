@@ -19,14 +19,14 @@ public class MatchService {
         String secondPlayerName = requestDto.secondPlayerName();
 
         Player firstPlayer = playerRepository.find(firstPlayerName)
-                .orElse(new Player(firstPlayerName));
+                .orElse(new Player(UUID.randomUUID(), firstPlayerName));
         Player secondPlayer = playerRepository.find(secondPlayerName)
-                .orElse(new Player(secondPlayerName));
+                .orElse(new Player(UUID.randomUUID(), secondPlayerName));
 
         Match match = new Match(firstPlayer, secondPlayer);
 
         // кладём матч в коллекцию текущих матчей
 
-        return match.getId();
+        return match.getUuid();
     }
 }

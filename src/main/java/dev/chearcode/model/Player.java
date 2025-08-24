@@ -6,8 +6,8 @@ public class Player {
     private final UUID id;
     private final String name;
 
-    public Player(String name) {
-        this.id = UUID.randomUUID();
+    public Player(UUID id, String name) {
+        this.id = id;
         this.name = name;
     }
 
