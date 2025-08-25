@@ -27,6 +27,6 @@ public class MatchService {
 
         // кладём матч в коллекцию текущих матчей
 
-        return match.getUuid();
+        return match.getId();
     }
 }

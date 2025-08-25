@@ -1,8 +1,8 @@
 package model;
 
-import dev.chearcode.model.Game;
+import dev.chearcode.model.TennisLevel;
 import dev.chearcode.model.Player;
-import dev.chearcode.model.RegularGame;
+import dev.chearcode.model.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RegularGameTests {
+public class GameTests {
     private static final String FIFTEEN = "15";
     private static final String THIRTY = "30";
     private static final String FORTY = "40";
@@ -18,11 +18,11 @@ public class RegularGameTests {
     private final Player player1 = new Player(UUID.randomUUID(), "Player_1");
     private final Player player2 = new Player(UUID.randomUUID(), "Player_2");
 
-    private Game game;
+    private TennisLevel game;
 
     @BeforeEach
     protected void createNewGame() {
-        this.game = new RegularGame(player1, player2);
+        this.game = new Game(player1, player2);
     }
 
     @Test
@@ -87,6 +87,7 @@ public class RegularGameTests {
 
         addPoints(player1, 1);
         assertEquals(ADVANTAGE, game.getScoreValue(player1));
+        assertEquals(FORTY, game.getScoreValue(player2));
         assertFalse(game.isFinished());
 
         addPoints(player2, 1);
@@ -96,6 +97,7 @@ public class RegularGameTests {
 
         addPoints(player2, 1);
         assertEquals(ADVANTAGE, game.getScoreValue(player2));
+        assertEquals(FORTY, game.getScoreValue(player1));
         assertFalse(game.isFinished());
 
         addPoints(player1, 1);

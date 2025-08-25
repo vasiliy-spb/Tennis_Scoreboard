@@ -1,47 +1,40 @@
 package dev.chearcode.model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-public class Match extends AbstractGameLevel {
+public class Match extends AbstractTennisLevel {
     private static final int MIN_SCORE_TO_WIN = 2;
     private static final int MIN_DIFF_TO_WIN = 1;
-    private final UUID uuid;
-    private final List<Set> sets;
+    private final UUID id;
 
     public Match(Player firstPlayer, Player secondPlayer) {
-        super(firstPlayer, secondPlayer, MIN_SCORE_TO_WIN);
-        this.uuid = UUID.randomUUID();
-        this.sets = new ArrayList<>();
-        sets.add(new Set(firstPlayer, secondPlayer));
+        super(firstPlayer, secondPlayer);
+        this.id = UUID.randomUUID();
     }
 
     @Override
-    protected int getMinDiffToWin() {
-        return MIN_DIFF_TO_WIN;
+    protected TennisLevel createInitialLevel() {
+        return new TennisSet(firstPlayer, secondPlayer);
     }
 
     @Override
-    public void pointWonBy(Player player) {
-        checkIfFinished();
-
-        Set currentSet = sets.get(sets.size() - 1);
-        currentSet.pointWonBy(player);
-        if (!currentSet.isFinished()) {
-            return;
+    protected boolean finishCondition() {
+        if (hasAnyoneAchieveVictoryScore()) {
+            return getScoreDiff() >= MIN_DIFF_TO_WIN;
         }
-        scores.merge(player, 1, Integer::sum);
-        if (!isFinished()) {
-            sets.add(new Set(firstPlayer, secondPlayer));
-        }
+        return false;
     }
 
-    public List<Set> getSets() {
-        return sets;
+    private boolean hasAnyoneAchieveVictoryScore() {
+        return scores.get(firstPlayer) >= MIN_SCORE_TO_WIN || scores.get(secondPlayer) >= MIN_SCORE_TO_WIN;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    @Override
+    protected TennisLevel createNextLevel() {
+        return new TennisSet(firstPlayer, secondPlayer);
+    }
+
+    public UUID getId() {
+        return id;
     }
 }

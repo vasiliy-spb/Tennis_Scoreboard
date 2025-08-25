@@ -1,9 +1,6 @@
 package model;
 
-import dev.chearcode.model.Game;
-import dev.chearcode.model.Player;
-import dev.chearcode.model.Set;
-import dev.chearcode.model.TieBreak;
+import dev.chearcode.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,22 +9,22 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SetTests {
+public class TennisSetTests {
     private final Player player1 = new Player(UUID.randomUUID(), "Player_1");
     private final Player player2 = new Player(UUID.randomUUID(), "Player_2");
 
-    private Set set;
+    private TennisSet tennisSet;
 
     @BeforeEach
     protected void createNewSet() {
-        this.set = new Set(player1, player2);
+        this.tennisSet = new TennisSet(player1, player2);
     }
 
     @Test
     public void testFirstGameStarted() {
-        assertTrue(set.getGames().size() == 1);
+        assertTrue(tennisSet.getLevels().size() == 1);
 
-        Game currentGame = set.getGames().get(0);
+        TennisLevel currentGame = tennisSet.getLevels().get(0);
         assertFalse(currentGame.isFinished());
     }
 
@@ -35,11 +32,11 @@ public class SetTests {
     public void testNewGameStarted() {
         wonGames(player1, 1);
 
-        List<Game> games = set.getGames();
+        List<TennisLevel> games = tennisSet.getLevels();
 
         assertEquals(2, games.size());
 
-        Game currentGame = games.get(games.size() - 1);
+        TennisLevel currentGame = games.get(games.size() - 1);
         assertFalse(currentGame.isFinished());
     }
 
@@ -47,15 +44,15 @@ public class SetTests {
     public void testCorrectCalculationOneScore() {
         wonGames(player1, 1);
 
-        List<Game> games = set.getGames();
+        List<TennisLevel> games = tennisSet.getLevels();
 
         assertEquals(2, games.size());
 
-        Game currentGame = games.get(games.size() - 1);
+        TennisLevel currentGame = games.get(games.size() - 1);
         assertFalse(currentGame.isFinished());
 
-        assertEquals(1, set.getScore(player1));
-        assertEquals(0, set.getScore(player2));
+        assertEquals("1", tennisSet.getScoreValue(player1));
+        assertEquals("0", tennisSet.getScoreValue(player2));
     }
 
     @Test
@@ -63,17 +60,17 @@ public class SetTests {
         addPoints(player2, 3);
         wonCurrentGame(player1);
 
-        List<Game> games = set.getGames();
+        List<TennisLevel> games = tennisSet.getLevels();
         assertEquals(2, games.size());
 
-        Game currentGame = games.get(games.size() - 1);
+        TennisLevel currentGame = games.get(games.size() - 1);
         assertFalse(currentGame.isFinished());
 
-        assertEquals(1, set.getScore(player1));
-        assertEquals(0, set.getScore(player2));
+        assertEquals("1", tennisSet.getScoreValue(player1));
+        assertEquals("0", tennisSet.getScoreValue(player2));
 
-        assertEquals(0, currentGame.getScore(player1));
-        assertEquals(0, currentGame.getScore(player2));
+        assertEquals("0", currentGame.getScoreValue(player1));
+        assertEquals("0", currentGame.getScoreValue(player2));
     }
 
     @Test
@@ -83,7 +80,7 @@ public class SetTests {
         wonGames(player1, 1);
         wonGames(player2, 1);
 
-        assertFalse(set.isFinished());
+        assertFalse(tennisSet.isFinished());
     }
 
     @Test
@@ -93,13 +90,13 @@ public class SetTests {
         wonGames(player1, 1);
         wonGames(player2, 1);
 
-        assertFalse(set.isFinished());
+        assertFalse(tennisSet.isFinished());
 
-        assertEquals(6, set.getScore(player1));
-        assertEquals(6, set.getScore(player2));
+        assertEquals("6", tennisSet.getScoreValue(player1));
+        assertEquals("6", tennisSet.getScoreValue(player2));
 
-        List<Game> games = set.getGames();
-        Game game = games.get(games.size() - 1);
+        List<TennisLevel> games = tennisSet.getLevels();
+        TennisLevel game = games.get(games.size() - 1);
         assertInstanceOf(TieBreak.class, game);
     }
 
@@ -111,19 +108,19 @@ public class SetTests {
         wonGames(player2, 1);
         wonGames(player1, 1);
 
-        assertEquals(7, set.getScore(player1));
-        assertEquals(6, set.getScore(player2));
+        assertEquals("7", tennisSet.getScoreValue(player1));
+        assertEquals("6", tennisSet.getScoreValue(player2));
 
-        assertTrue(set.isFinished());
+        assertTrue(tennisSet.isFinished());
     }
 
     @Test
     public void testTrowExceptionWithTryingToAddExtraPoint() {
         wonGames(player1, 6);
 
-        assertTrue(set.isFinished());
+        assertTrue(tennisSet.isFinished());
 
-        assertThrows(IllegalStateException.class, () -> set.pointWonBy(player1));
+        assertThrows(IllegalStateException.class, () -> tennisSet.pointWonBy(player1));
     }
 
     @Test
@@ -134,22 +131,22 @@ public class SetTests {
         wonGames(player2, 1);
         wonGames(player1, 2);
 
-        assertTrue(set.isFinished());
+        assertTrue(tennisSet.isFinished());
 
-        assertThrows(IllegalStateException.class, () -> set.pointWonBy(player1));
+        assertThrows(IllegalStateException.class, () -> tennisSet.pointWonBy(player1));
     }
 
     private void wonCurrentGame(Player player) {
-        List<Game> games = set.getGames();
-        Game game = games.get(games.size() - 1);
+        List<TennisLevel> games = tennisSet.getLevels();
+        TennisLevel game = games.get(games.size() - 1);
         while (!game.isFinished()) {
-            set.pointWonBy(player);
+            tennisSet.pointWonBy(player);
         }
     }
 
     private void addPoints(Player player, int count) {
         while (count-- > 0) {
-            set.pointWonBy(player);
+            tennisSet.pointWonBy(player);
         }
     }
 

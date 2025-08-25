@@ -2,7 +2,7 @@ package model;
 
 import dev.chearcode.model.Match;
 import dev.chearcode.model.Player;
-import dev.chearcode.model.Set;
+import dev.chearcode.model.TennisLevel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,52 +24,52 @@ public class MatchTests {
 
     @Test
     public void testFirstSetStarted() {
-        assertTrue(match.getSets().size() == 1);
+        assertTrue(match.getLevels().size() == 1);
 
-        Set currentSet = match.getSets().get(0);
-        assertFalse(currentSet.isFinished());
+        TennisLevel currentTennisSet = match.getLevels().get(0);
+        assertFalse(currentTennisSet.isFinished());
     }
 
     @Test
     public void testNewGameStarted() {
         wonCurrentSet(player2);
 
-        List<Set> sets = match.getSets();
-        assertTrue(sets.size() == 2);
+        List<TennisLevel> tennisSets = match.getLevels();
+        assertTrue(tennisSets.size() == 2);
 
-        Set currentSet = sets.get(sets.size() - 1);
-        assertFalse(currentSet.isFinished());
+        TennisLevel currentTennisSet = tennisSets.get(tennisSets.size() - 1);
+        assertFalse(currentTennisSet.isFinished());
     }
 
     @Test
     public void testCorrectCalculationOneScore() {
         wonCurrentSet(player2);
 
-        List<Set> sets = match.getSets();
-        assertTrue(sets.size() == 2);
+        List<TennisLevel> tennisSets = match.getLevels();
+        assertTrue(tennisSets.size() == 2);
 
-        Set currentSet = sets.get(sets.size() - 1);
-        assertFalse(currentSet.isFinished());
+        TennisLevel currentTennisSet = tennisSets.get(tennisSets.size() - 1);
+        assertFalse(currentTennisSet.isFinished());
 
-        assertEquals(0, match.getScore(player1));
-        assertEquals(1, match.getScore(player2));
+        assertEquals("0", match.getScoreValue(player1));
+        assertEquals("1", match.getScoreValue(player2));
     }
 
     @Test
     public void testCorrectCalculationScoresInNewSet() {
         wonCurrentSet(player2);
 
-        List<Set> sets = match.getSets();
-        assertTrue(sets.size() == 2);
+        List<TennisLevel> tennisSets = match.getLevels();
+        assertTrue(tennisSets.size() == 2);
 
-        Set currentSet = sets.get(sets.size() - 1);
-        assertFalse(currentSet.isFinished());
+        TennisLevel currentTennisSet = tennisSets.get(tennisSets.size() - 1);
+        assertFalse(currentTennisSet.isFinished());
 
-        assertEquals(0, match.getScore(player1));
-        assertEquals(1, match.getScore(player2));
+        assertEquals("0", match.getScoreValue(player1));
+        assertEquals("1", match.getScoreValue(player2));
 
-        assertEquals(0, currentSet.getScore(player1));
-        assertEquals(0, currentSet.getScore(player2));
+        assertEquals("0", currentTennisSet.getScoreValue(player1));
+        assertEquals("0", currentTennisSet.getScoreValue(player2));
     }
 
     @Test
@@ -86,8 +86,8 @@ public class MatchTests {
         wonSets(player1, 2);
 
         assertTrue(match.isFinished());
-        assertEquals(2, match.getScore(player1));
-        assertEquals(1, match.getScore(player2));
+        assertEquals("2", match.getScoreValue(player1));
+        assertEquals("1", match.getScoreValue(player2));
     }
 
     @Test
@@ -95,8 +95,8 @@ public class MatchTests {
         wonSets(player2, 2);
 
         assertTrue(match.isFinished());
-        assertEquals(0, match.getScore(player1));
-        assertEquals(2, match.getScore(player2));
+        assertEquals("0", match.getScoreValue(player1));
+        assertEquals("2", match.getScoreValue(player2));
     }
 
     @Test
@@ -104,8 +104,8 @@ public class MatchTests {
         wonSets(player2, 2);
 
         assertTrue(match.isFinished());
-        assertEquals(0, match.getScore(player1));
-        assertEquals(2, match.getScore(player2));
+        assertEquals("0", match.getScoreValue(player1));
+        assertEquals("2", match.getScoreValue(player2));
 
         assertThrows(IllegalStateException.class, () -> match.pointWonBy(player1));
     }
@@ -116,8 +116,8 @@ public class MatchTests {
         wonSets(player2, 2);
 
         assertTrue(match.isFinished());
-        assertEquals(1, match.getScore(player1));
-        assertEquals(2, match.getScore(player2));
+        assertEquals("1", match.getScoreValue(player1));
+        assertEquals("2", match.getScoreValue(player2));
 
         assertThrows(IllegalStateException.class, () -> match.pointWonBy(player1));
     }
@@ -129,9 +129,9 @@ public class MatchTests {
     }
 
     private void wonCurrentSet(Player player) {
-        List<Set> sets = match.getSets();
-        Set set = sets.get(sets.size() - 1);
-        while (!set.isFinished()) {
+        List<TennisLevel> tennisSets = match.getLevels();
+        TennisLevel tennisSet = tennisSets.get(tennisSets.size() - 1);
+        while (!tennisSet.isFinished()) {
             match.pointWonBy(player);
         }
     }

@@ -1,6 +1,6 @@
 package model;
 
-import dev.chearcode.model.Game;
+import dev.chearcode.model.TennisLevel;
 import dev.chearcode.model.Player;
 import dev.chearcode.model.TieBreak;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +14,7 @@ public class TieBreakTests {
     private final Player player1 = new Player(UUID.randomUUID(), "Player_1");
     private final Player player2 = new Player(UUID.randomUUID(), "Player_2");
 
-    private Game game;
+    private TennisLevel game;
 
     @BeforeEach
     protected void createNewGame() {
