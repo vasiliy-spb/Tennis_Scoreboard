@@ -1,6 +1,6 @@
 package dev.chearcode.repository;
 
-import dev.chearcode.model.Player;
+import dev.chearcode.entity.Player;
 
 import java.util.Optional;
 

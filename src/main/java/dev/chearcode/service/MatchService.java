@@ -1,8 +1,8 @@
 package dev.chearcode.service;
 
 import dev.chearcode.dto.CreateMatchRequestDto;
-import dev.chearcode.model.Match;
-import dev.chearcode.model.Player;
+import dev.chearcode.model.TennisMatch;
+import dev.chearcode.entity.Player;
 import dev.chearcode.repository.PlayerRepository;
 
 import java.util.UUID;
@@ -19,11 +19,11 @@ public class MatchService {
         String secondPlayerName = requestDto.secondPlayerName();
 
         Player firstPlayer = playerRepository.find(firstPlayerName)
-                .orElse(new Player(UUID.randomUUID(), firstPlayerName));
+                .orElse(new Player(firstPlayerName));
         Player secondPlayer = playerRepository.find(secondPlayerName)
-                .orElse(new Player(UUID.randomUUID(), secondPlayerName));
+                .orElse(new Player(secondPlayerName));
 
-        Match match = new Match(firstPlayer, secondPlayer);
+        TennisMatch match = new TennisMatch(firstPlayer, secondPlayer);
 
         // кладём матч в коллекцию текущих матчей
 

@@ -1,5 +1,6 @@
 package model;
 
+import dev.chearcode.entity.Player;
 import dev.chearcode.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,15 +10,18 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MatchTests {
-    private final Player player1 = new Player(UUID.randomUUID(), "Player_1");
-    private final Player player2 = new Player(UUID.randomUUID(), "Player_2");
-
-    private Match match;
+public class TennisMatchTests {
+    private Player player1;
+    private Player player2;
+    private TennisMatch match;
 
     @BeforeEach
-    protected void createNewSet() {
-        this.match = new Match(player1, player2);
+    protected void init() {
+        player1 = new Player("Player_1");
+        player1.setId(UUID.randomUUID());
+        player2 = new Player("Player_2");
+        player2.setId(UUID.randomUUID());
+        match = new TennisMatch(player1, player2);
     }
 
     @Test
@@ -127,10 +131,6 @@ public class MatchTests {
 
     @Test
     public void testMatchWithTieBreakSets() {
-//        wonSets(player1, 5);
-//        wonSets(player2, 5);
-//        wonSets(player1, 1);
-//        wonSets(player2, 1);
         winGamesSimple(match, player1, 5);
         winGamesSimple(match, player2, 5);
         winGamesSimple(match, player1, 1);
@@ -163,13 +163,13 @@ public class MatchTests {
         assertEquals(player1, match.getWinner());
     }
 
-    private void winStraightGame(Match match, Player player) {
+    private void winStraightGame(TennisMatch match, Player player) {
         for (int i = 0; i < 4; i++) {
             match.pointWonBy(player);
         }
     }
 
-    private void winGamesSimple(Match match, Player player, int count) {
+    private void winGamesSimple(TennisMatch match, Player player, int count) {
         while (count-- > 0) {
             winStraightGame(match, player);
         }

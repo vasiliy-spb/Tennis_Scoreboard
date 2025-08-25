@@ -1,14 +1,16 @@
 package dev.chearcode.model;
 
+import dev.chearcode.entity.Player;
+
 import java.util.Objects;
 import java.util.UUID;
 
-public class Match extends HighTennisLevel {
+public class TennisMatch extends HighTennisLevel {
     private static final int MIN_SCORE_TO_WIN = 2;
     private static final int MIN_DIFF_TO_WIN = 1;
     private final UUID id;
 
-    public Match(Player firstPlayer, Player secondPlayer) {
+    public TennisMatch(Player firstPlayer, Player secondPlayer) {
         super(firstPlayer, secondPlayer, MIN_SCORE_TO_WIN);
         this.id = UUID.randomUUID();
     }
@@ -36,7 +38,7 @@ public class Match extends HighTennisLevel {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Match match = (Match) o;
+        TennisMatch match = (TennisMatch) o;
         return Objects.equals(id, match.id);
     }
 

@@ -1,7 +1,7 @@
 plugins {
     war
     id("java")
-    id("org.gretty") version("4.1.0")
+    id("org.gretty") version ("4.1.0")
 }
 
 group = "dev.chearcode"
@@ -17,6 +17,11 @@ dependencies {
     implementation("jakarta.servlet:jakarta.servlet-api:6.0.0")
     implementation("org.hibernate.validator:hibernate-validator:9.0.1.Final")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+    implementation("org.hibernate.orm:hibernate-core:7.1.0.Final")
+    runtimeOnly("com.h2database:h2:2.3.232")
+
+    runtimeOnly("org.slf4j:slf4j-simple:2.0.7")
+
 }
 
 tasks.test {

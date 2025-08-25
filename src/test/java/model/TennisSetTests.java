@@ -1,5 +1,6 @@
 package model;
 
+import dev.chearcode.entity.Player;
 import dev.chearcode.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,14 +11,17 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TennisSetTests {
-    private final Player player1 = new Player(UUID.randomUUID(), "Player_1");
-    private final Player player2 = new Player(UUID.randomUUID(), "Player_2");
-
+    private Player player1;
+    private Player player2;
     private TennisSet tennisSet;
 
     @BeforeEach
-    protected void createNewSet() {
-        this.tennisSet = new TennisSet(player1, player2);
+    protected void init() {
+        player1 = new Player("Player_1");
+        player1.setId(UUID.randomUUID());
+        player2 = new Player("Player_2");
+        player2.setId(UUID.randomUUID());
+        tennisSet = new TennisSet(player1, player2);
     }
 
     @Test

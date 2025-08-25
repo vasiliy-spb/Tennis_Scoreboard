@@ -1,5 +1,7 @@
 package dev.chearcode.model;
 
+import dev.chearcode.entity.Player;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,9 +1,9 @@
 package dev.chearcode.repository;
 
-import dev.chearcode.model.Match;
+import dev.chearcode.model.TennisMatch;
 
 import java.util.Optional;
 
 public interface MatchRepository {
-    Optional<Match> find(String firstPlayerName, String secondPlayerName);
+    Optional<TennisMatch> find(String firstPlayerName, String secondPlayerName);
 }

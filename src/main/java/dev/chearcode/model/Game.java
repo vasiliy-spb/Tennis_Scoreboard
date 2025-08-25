@@ -1,5 +1,7 @@
 package dev.chearcode.model;
 
+import dev.chearcode.entity.Player;
+
 public class Game extends BaseLevel<Game.Point> {
     private boolean finished = false;
 

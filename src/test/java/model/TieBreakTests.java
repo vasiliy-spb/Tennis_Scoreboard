@@ -1,7 +1,8 @@
 package model;
 
+import dev.chearcode.model.Game;
 import dev.chearcode.model.TennisLevel;
-import dev.chearcode.model.Player;
+import dev.chearcode.entity.Player;
 import dev.chearcode.model.TieBreak;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,14 +12,17 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TieBreakTests {
-    private final Player player1 = new Player(UUID.randomUUID(), "Player_1");
-    private final Player player2 = new Player(UUID.randomUUID(), "Player_2");
-
+    private Player player1;
+    private Player player2;
     private TennisLevel game;
 
     @BeforeEach
-    protected void createNewGame() {
-        this.game = new TieBreak(player1, player2);
+    protected void init() {
+        player1 = new Player("Player_1");
+        player1.setId(UUID.randomUUID());
+        player2 = new Player("Player_2");
+        player2.setId(UUID.randomUUID());
+        game = new TieBreak(player1, player2);
     }
 
     @Test

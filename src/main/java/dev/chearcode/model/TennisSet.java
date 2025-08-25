@@ -1,5 +1,7 @@
 package dev.chearcode.model;
 
+import dev.chearcode.entity.Player;
+
 public class TennisSet extends HighTennisLevel {
     private static final int MIN_SCORE_TO_WIN = 6;
     private static final int MIN_DIFF_TO_WIN = 2;

@@ -1,5 +1,7 @@
 package dev.chearcode.model;
 
+import dev.chearcode.entity.Player;
+
 public abstract class NumericPointLevel extends BaseLevel<Integer> {
     private final int minScoreToWin;
 
