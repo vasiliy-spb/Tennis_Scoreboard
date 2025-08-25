@@ -1,8 +1,6 @@
 package model;
 
-import dev.chearcode.model.Match;
-import dev.chearcode.model.Player;
-import dev.chearcode.model.TennisLevel;
+import dev.chearcode.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -120,6 +118,61 @@ public class MatchTests {
         assertEquals("2", match.getScoreValue(player2));
 
         assertThrows(IllegalStateException.class, () -> match.pointWonBy(player1));
+    }
+
+    @Test
+    public void testGetWinnerBeforeFinishThrows() {
+        assertThrows(IllegalStateException.class, () -> match.getWinner());
+    }
+
+    @Test
+    public void testMatchWithTieBreakSets() {
+//        wonSets(player1, 5);
+//        wonSets(player2, 5);
+//        wonSets(player1, 1);
+//        wonSets(player2, 1);
+        winGamesSimple(match, player1, 5);
+        winGamesSimple(match, player2, 5);
+        winGamesSimple(match, player1, 1);
+        winGamesSimple(match, player2, 1);
+
+        TennisSet firstSet = (TennisSet) match.getLevels().get(0);
+        List<TennisLevel> games = firstSet.getLevels();
+        TennisLevel tennisLevel = games.get(games.size() - 1);
+        assertTrue(tennisLevel instanceof TieBreak);
+
+        while (!tennisLevel.isFinished()) {
+            match.pointWonBy(player1);
+        }
+        assertTrue(firstSet.isFinished());
+        assertEquals("7", firstSet.getScoreValue(player1));
+        assertEquals("6", firstSet.getScoreValue(player2));
+
+        winGamesSimple(match, player1, 4);
+        winGamesSimple(match, player2, 6);
+        TennisSet secondSet = (TennisSet) match.getLevels().get(1);
+        assertTrue(secondSet.isFinished());
+        assertEquals("4", secondSet.getScoreValue(player1));
+        assertEquals("6", secondSet.getScoreValue(player2));
+
+        winGamesSimple(match, player2, 2);
+        winGamesSimple(match, player1, 6);
+        assertTrue(match.isFinished());
+        assertEquals("2", match.getScoreValue(player1));
+        assertEquals("1", match.getScoreValue(player2));
+        assertEquals(player1, match.getWinner());
+    }
+
+    private void winStraightGame(Match match, Player player) {
+        for (int i = 0; i < 4; i++) {
+            match.pointWonBy(player);
+        }
+    }
+
+    private void winGamesSimple(Match match, Player player, int count) {
+        while (count-- > 0) {
+            winStraightGame(match, player);
+        }
     }
 
     private void wonSets(Player player, int count) {

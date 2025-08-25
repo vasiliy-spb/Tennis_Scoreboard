@@ -15,6 +15,8 @@ public class GameTests {
     private static final String THIRTY = "30";
     private static final String FORTY = "40";
     private static final String ADVANTAGE = "AD";
+    private static final String GAME = "GAME";
+    private static final String LOVE = "0";
     private final Player player1 = new Player(UUID.randomUUID(), "Player_1");
     private final Player player2 = new Player(UUID.randomUUID(), "Player_2");
 
@@ -116,6 +118,40 @@ public class GameTests {
         assertTrue(game.isFinished());
 
         assertThrows(IllegalStateException.class, () -> game.pointWonBy(player1));
+    }
+
+    @Test
+    public void testGetWinnerBeforeFinishThrows() {
+        assertThrows(IllegalStateException.class, () -> game.getWinner());
+    }
+
+    @Test
+    public void testCleanVictoryFromDeuce() {
+        addPoints(player1, 3);
+        addPoints(player2, 3);
+        assertEquals(FORTY, game.getScoreValue(player1));
+        assertEquals(FORTY, game.getScoreValue(player2));
+
+        addPoints(player1, 1);
+        assertEquals(ADVANTAGE, game.getScoreValue(player1));
+        assertFalse(game.isFinished());
+
+        addPoints(player1, 1);
+        assertTrue(game.isFinished());
+
+        assertEquals(GAME, game.getScoreValue(player1));
+        assertEquals(FORTY, game.getScoreValue(player2));
+        assertEquals(player1, game.getWinner());
+    }
+
+    @Test
+    public void testScoreValueAfterFinishCleanVictory() {
+        addPoints(player2, 4);
+        assertTrue(game.isFinished());
+        assertEquals(GAME, game.getScoreValue(player2));
+
+        assertEquals(LOVE, game.getScoreValue(player1));
+        assertEquals(player2, game.getWinner());
     }
 
     private void addPoints(Player player, int count) {

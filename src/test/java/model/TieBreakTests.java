@@ -93,6 +93,22 @@ public class TieBreakTests {
         assertThrows(IllegalStateException.class, () -> game.pointWonBy(player1));
     }
 
+    @Test
+    public void testGetWinnerBeforeFinishThrows() {
+        assertThrows(IllegalStateException.class, () -> game.getWinner());
+    }
+
+    @Test
+    public void testCleanVictory75Scenario() {
+        addPoints(player1, 5);
+        addPoints(player2, 7);
+
+        assertTrue(game.isFinished());
+        assertEquals(player2, game.getWinner());
+        assertEquals("7", game.getScoreValue(player2));
+        assertEquals("5", game.getScoreValue(player1));
+    }
+
 
     private void addPoints(Player player, int count) {
         while (count-- > 0) {

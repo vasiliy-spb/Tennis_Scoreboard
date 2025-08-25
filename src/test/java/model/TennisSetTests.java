@@ -136,6 +136,37 @@ public class TennisSetTests {
         assertThrows(IllegalStateException.class, () -> tennisSet.pointWonBy(player1));
     }
 
+    @Test
+    public void testRegularVictoryWithoutTieBreak_6_4() {
+        wonGames(player1, 4);
+        wonGames(player2, 4);
+        wonGames(player1, 2);
+
+        assertTrue(tennisSet.isFinished());
+        assertEquals("6", tennisSet.getScoreValue(player1));
+        assertEquals("4", tennisSet.getScoreValue(player2));
+        assertEquals(player1, tennisSet.getWinner());
+    }
+
+    @Test
+    public void testVictory75Scenario() {
+        wonGames(player1, 5);
+        wonGames(player2, 5);
+        wonGames(player1, 1);
+        assertFalse(tennisSet.isFinished());
+
+        wonGames(player1, 1);
+        assertTrue(tennisSet.isFinished());
+        assertEquals("7", tennisSet.getScoreValue(player1));
+        assertEquals("5", tennisSet.getScoreValue(player2));
+        assertEquals(player1, tennisSet.getWinner());
+    }
+
+    @Test
+    public void testGetWinnerBeforeFinishThrows() {
+        assertThrows(IllegalStateException.class, () -> tennisSet.getWinner());
+    }
+
     private void wonCurrentGame(Player player) {
         List<TennisLevel> games = tennisSet.getLevels();
         TennisLevel game = games.get(games.size() - 1);
