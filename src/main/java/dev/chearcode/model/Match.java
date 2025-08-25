@@ -1,14 +1,15 @@
 package dev.chearcode.model;
 
+import java.util.Objects;
 import java.util.UUID;
 
-public class Match extends AbstractTennisLevel {
+public class Match extends HighTennisLevel {
     private static final int MIN_SCORE_TO_WIN = 2;
     private static final int MIN_DIFF_TO_WIN = 1;
     private final UUID id;
 
     public Match(Player firstPlayer, Player secondPlayer) {
-        super(firstPlayer, secondPlayer);
+        super(firstPlayer, secondPlayer, MIN_SCORE_TO_WIN);
         this.id = UUID.randomUUID();
     }
 
@@ -19,14 +20,7 @@ public class Match extends AbstractTennisLevel {
 
     @Override
     protected boolean finishCondition() {
-        if (hasAnyoneAchieveVictoryScore()) {
-            return getScoreDiff() >= MIN_DIFF_TO_WIN;
-        }
-        return false;
-    }
-
-    private boolean hasAnyoneAchieveVictoryScore() {
-        return scores.get(firstPlayer) >= MIN_SCORE_TO_WIN || scores.get(secondPlayer) >= MIN_SCORE_TO_WIN;
+        return hasAnyoneAchieveVictoryScore() && getScoreDiff() >= MIN_DIFF_TO_WIN;
     }
 
     @Override
@@ -36,5 +30,18 @@ public class Match extends AbstractTennisLevel {
 
     public UUID getId() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Match match = (Match) o;
+        return Objects.equals(id, match.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

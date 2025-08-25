@@ -3,25 +3,23 @@ package dev.chearcode.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class GameLevel<T> implements TennisLevel {
+public abstract class BaseLevel<T> implements TennisLevel {
     protected final Player firstPlayer;
     protected final Player secondPlayer;
-    protected final Map<Player, T> points;
+    protected final Map<Player, T> scores;
 
-    public GameLevel(Player firstPlayer, Player secondPlayer) {
+    public BaseLevel(Player firstPlayer, Player secondPlayer) {
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
-        this.points = initPoints();
+        this.scores = initScores();
     }
 
-    private Map<Player, T> initPoints() {
+    private Map<Player, T> initScores() {
         return new HashMap<>(Map.of(
-                firstPlayer, getInitPoint(),
-                secondPlayer, getInitPoint())
+                firstPlayer, getInitScore(),
+                secondPlayer, getInitScore())
         );
     }
-
-    protected abstract T getInitPoint();
 
     @Override
     public void pointWonBy(Player player) {
@@ -29,8 +27,6 @@ public abstract class GameLevel<T> implements TennisLevel {
 
         addPoint(player);
     }
-
-    protected abstract void addPoint(Player player);
 
     private void checkState() {
         if (isFinished()) {
@@ -51,7 +47,11 @@ public abstract class GameLevel<T> implements TennisLevel {
         return getWinnerByScore();
     }
 
-    protected abstract Player getWinnerByScore();
+    protected abstract T getInitScore();
 
     protected abstract boolean finishCondition();
+
+    protected abstract void addPoint(Player player);
+
+    protected abstract Player getWinnerByScore();
 }
