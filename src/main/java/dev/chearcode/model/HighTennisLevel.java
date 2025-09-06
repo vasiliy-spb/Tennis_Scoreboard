@@ -2,21 +2,21 @@ package dev.chearcode.model;
 
 import dev.chearcode.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public abstract class HighTennisLevel extends NumericPointLevel {
-    protected List<TennisLevel> levels;
+    protected Stack<TennisLevel> levels;
 
     protected HighTennisLevel(Player firstPlayer, Player secondPlayer, int minScoreToWin) {
         super(firstPlayer, secondPlayer, minScoreToWin);
-        this.levels = new ArrayList<>();
+        this.levels = new Stack<>();
         levels.add(createInitialLevel());
     }
 
     @Override
     protected void addPoint(Player player) {
-        TennisLevel current = levels.get(levels.size() - 1);
+        TennisLevel current = levels.peek();
         current.pointWonBy(player);
 
         if (current.isFinished()) {
@@ -29,6 +29,10 @@ public abstract class HighTennisLevel extends NumericPointLevel {
 
     public List<TennisLevel> getLevels() {
         return List.copyOf(levels);
+    }
+
+    public TennisLevel getActiveSubLevel() {
+        return levels.peek();
     }
 
     protected abstract TennisLevel createInitialLevel();

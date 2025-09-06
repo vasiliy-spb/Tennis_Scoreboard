@@ -49,6 +49,14 @@ public abstract class BaseLevel<T> implements TennisLevel {
         return getWinnerByScore();
     }
 
+    public Player getFirstPlayer() {
+        return firstPlayer;
+    }
+
+    public Player getSecondPlayer() {
+        return secondPlayer;
+    }
+
     protected abstract T getInitScore();
 
     protected abstract boolean finishCondition();
