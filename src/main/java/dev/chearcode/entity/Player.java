@@ -1,40 +1,29 @@
 package dev.chearcode.entity;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @Entity
-@Table(name = "players")
-public class Player {
-    @Id
-    @GeneratedValue
-    @UuidGenerator
-    @Column(nullable = false, updatable = false)
-    private UUID id;
-
-    @Column(nullable = false, unique = true)
+@Table(name = "players", indexes = {
+        @Index(name = "uq_players_name", columnList = "name", unique = true)
+})
+public class Player extends BaseEntity {
+    @Column(nullable = false)
     private String name;
 
-    protected Player() {
+    public Player() {
     }
 
     public Player(String name) {
         this.name = name;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public void setName(String name) {

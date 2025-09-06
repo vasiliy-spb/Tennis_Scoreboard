@@ -1,18 +1,10 @@
 package dev.chearcode.entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.UuidGenerator;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "matches")
-public class Match {
-    @Id
-    @GeneratedValue
-    @UuidGenerator
-    @Column(nullable = false, updatable = false)
-    private UUID id;
+public class Match extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "first_player_id", nullable = false, updatable = false)
     private Player firstPlayer;
@@ -24,14 +16,6 @@ public class Match {
     private Player winner;
 
     public Match() {
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public Player getFirstPlayer() {
