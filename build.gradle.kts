@@ -18,7 +18,12 @@ dependencies {
     implementation("org.hibernate.validator:hibernate-validator:9.0.1.Final")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
     implementation("org.hibernate.orm:hibernate-core:7.1.0.Final")
-    runtimeOnly("com.h2database:h2:2.3.232")
+    implementation("com.h2database:h2:2.3.232")
+    implementation("com.zaxxer:HikariCP:7.0.2")
+    implementation("org.yaml:snakeyaml:2.0")
+
+    implementation("jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0")
+    implementation("org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1")
 
     runtimeOnly("org.slf4j:slf4j-simple:2.0.7")
 
@@ -31,6 +36,5 @@ tasks.test {
 gretty {
     servletContainer = "jetty11"
     httpPort = 8080
-//    contextPath = "/tennis-scoreboard"
-    contextPath = "/myapp"
+    contextPath = "/tennis-scoreboard"
 }

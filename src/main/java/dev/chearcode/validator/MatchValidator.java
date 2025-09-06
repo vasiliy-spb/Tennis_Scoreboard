@@ -9,8 +9,10 @@ public class MatchValidator implements ConstraintValidator<ValidMatch, Object> {
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
         if (value instanceof CreateMatchRequestDto createMatchRequestDto) {
+
             String firstPlayerName = createMatchRequestDto.firstPlayerName();
             String secondPlayerName = createMatchRequestDto.secondPlayerName();
+
             return !firstPlayerName.equalsIgnoreCase(secondPlayerName);
         }
         return false;
