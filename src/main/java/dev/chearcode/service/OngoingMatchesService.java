@@ -1,7 +1,7 @@
 package dev.chearcode.service;
 
-import dev.chearcode.model.TennisMatch;
 import dev.chearcode.entity.Player;
+import dev.chearcode.model.TennisMatch;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,7 +21,15 @@ public class OngoingMatchesService {
         });
     }
 
-    public void addNewMatch(TennisMatch match) {
-        matches.put(match.getId(), match);
+    public void addNewMatch(UUID matchId, TennisMatch match) {
+        matches.put(matchId, match);
+    }
+
+    public TennisMatch get(UUID matchId) {
+        return matches.get(matchId);
+    }
+
+    public void remove(UUID matchId) {
+        matches.remove(matchId);
     }
 }
