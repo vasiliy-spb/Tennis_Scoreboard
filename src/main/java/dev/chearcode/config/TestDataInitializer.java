@@ -4,8 +4,6 @@ import dev.chearcode.entity.Match;
 import dev.chearcode.entity.Player;
 import dev.chearcode.repository.MatchRepository;
 import dev.chearcode.repository.PlayerRepository;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.*;
@@ -14,17 +12,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TestDataInitializer {
     private final PlayerRepository playerRepository;
     private final MatchRepository matchRepository;
-    private final SessionFactory sessionFactory;
 
     public TestDataInitializer(PlayerRepository playerRepository, MatchRepository matchRepository) {
         this.playerRepository = playerRepository;
         this.matchRepository = matchRepository;
-        this.sessionFactory = HibernateManager.getSessionFactory();
     }
 
     public void initialize(int matchCount, NameSet nameSet) {
         Transaction transaction = HibernateManager.getSession().beginTransaction();
-        System.out.println("28 transaction.isActive() = " + transaction.isActive());
 
         try {
             if (!playerRepository.findAll(1, 0).isEmpty()) {
@@ -35,7 +30,6 @@ public class TestDataInitializer {
 
             System.out.println("Initializing database with " + matchCount + " test matches...");
 
-            System.out.println("39 transaction.isActive() = " + transaction.isActive());
             Map<String, Player> playerMap = new HashMap<>();
             for (String name : nameSet.names()) {
                 Player player = new Player(name);
@@ -43,7 +37,6 @@ public class TestDataInitializer {
                 player.setId(id);
                 playerMap.put(name, player);
             }
-            System.out.println("47 transaction.isActive() = " + transaction.isActive());
 
             ThreadLocalRandom random = ThreadLocalRandom.current();
             List<String> nameList = new ArrayList<>(nameSet.names());

@@ -30,7 +30,7 @@
       <span class="logo-text">TennisScoreboard</span>
     </div>
     <nav class="nav-links">
-      <a class="nav-link" href="${pageContext.request.contextPath}/index.jsp">Home</a>
+      <a class="nav-link" href="${pageContext.request.contextPath}/index">Home</a>
       <a class="nav-link" href="${pageContext.request.contextPath}/matches">Matches</a>
     </nav>
   </section>
@@ -41,18 +41,15 @@
     <h1>Matches</h1>
 
     <div class="input-container">
-      <form method="get" action="${pageContext.request.contextPath}/matches">
-        <input
-          class="input-filter"
-          type="text"
-          name="filter_by_player_name"
-          placeholder="Filter by name"
-          value="${filter}"
-        />
-        <button class="btn-filter" type="submit">Filter</button>
-        <a href="${pageContext.request.contextPath}/matches">
-          <button type="button" class="btn-filter">Reset</button>
-        </a>
+      <form method="get" action="${pageContext.request.contextPath}/matches" class="filter-form">
+        <div class="filter-group">
+          <input class="input-filter" type="text" name="filter_by_player_name"
+                 placeholder="Filter by name" value="${filter}"/>
+          <div class="button-group">
+            <button class="btn-filter" type="submit">Filter</button>
+            <a href="${pageContext.request.contextPath}/matches" class="btn-filter reset-btn">Reset</a>
+          </div>
+        </div>
       </form>
     </div>
 

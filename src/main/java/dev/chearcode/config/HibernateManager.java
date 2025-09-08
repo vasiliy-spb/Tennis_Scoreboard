@@ -51,11 +51,11 @@ public class HibernateManager {
         }
     }
 
-    public static SessionFactory getSessionFactory() {
-        return sessionFactory;
-    }
-
     public static Session getSession() {
         return sessionFactory.getCurrentSession();
+    }
+
+    public static void closeSessionFactory() {
+        sessionFactory.close();
     }
 }

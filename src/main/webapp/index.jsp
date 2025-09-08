@@ -18,11 +18,11 @@
             <div class="nav-toggle">
                 <img src="${pageContext.request.contextPath}/images/menu.png" alt="Logo" class="logo">
             </div>
-            <span class="logo-text">JSP TennisScoreboard</span>
+            <span class="logo-text">TennisScoreboard</span>
         </div>
         <div>
             <nav class="nav-links">
-                <a class="nav-link" href="${pageContext.request.contextPath}/">Home</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/index">Home</a>
                 <a class="nav-link" href="${pageContext.request.contextPath}/matches">Matches</a>
             </nav>
         </div>
