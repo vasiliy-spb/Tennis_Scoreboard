@@ -3,6 +3,7 @@ package dev.chearcode.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.chearcode.exception.ValidationException;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @WebFilter("/*")
-public class ExceptionFilter extends HttpFilter {
+public class ExceptionHandler extends HttpFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -22,11 +23,18 @@ public class ExceptionFilter extends HttpFilter {
         try {
             super.doFilter(req, res, chain);
         } catch (Exception e) {
-            handleException(e, res);
+            handleException(e, req, res);
         }
     }
 
-    private void handleException(Exception e, HttpServletResponse res) throws IOException {
+    private void handleException(Exception e, HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        if (e instanceof ValidationException) {
+            req.setAttribute("errorMessage", e.getMessage());
+            String path = req.getServletPath() + ".jsp";
+            RequestDispatcher dispatcher = req.getRequestDispatcher(path);
+            dispatcher.forward(req, res);
+        }
+
         int statusCode = getStatusCode(e);
         res.setStatus(statusCode);
 
