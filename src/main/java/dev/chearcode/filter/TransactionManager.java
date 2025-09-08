@@ -15,7 +15,7 @@ import org.hibernate.Transaction;
 import java.io.IOException;
 
 @WebFilter("/*")
-public class TransactionFilter extends HttpFilter {
+public class TransactionManager extends HttpFilter {
     private SessionFactory sessionFactory;
 
     @Override
