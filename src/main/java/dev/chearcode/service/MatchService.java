@@ -51,4 +51,12 @@ public class MatchService {
     public List<Match> getAllByName(String name, int limit, int offset) {
         return matchRepository.findAllByPlayer(name, limit, offset);
     }
+
+    public long countAll() {
+        return matchRepository.countAll();
+    }
+
+    public long countAllByPlayer(String name) {
+        return matchRepository.countAllByPlayer(name);
+    }
 }

@@ -83,27 +83,85 @@
     </table>
 
     <c:if test="${hasPrev or hasNext}">
-      <div class="pagination">
-        <c:if test="${hasPrev}">
-          <a
-            class="prev"
-            href="${pageContext.request.contextPath}/matches
-                  ?page=${currentPage - 1}
-                  &filter_by_player_name=${fn:escapeXml(filter)}"
-          >&lt;</a>
-        </c:if>
+      <c:if test="${totalPages > 1}">
+          <div class="pagination">
+              <!-- Кнопка "Предыдущая" -->
+              <c:if test="${currentPage > 1}">
+                  <a class="pagination-btn prev-btn"
+                     href="${pageContext.request.contextPath}/matches?page=${currentPage - 1}&filter_by_player_name=${fn:escapeXml(filter)}">
+                      < Prev
+                  </a>
+              </c:if>
 
-        <span class="num-page current">${currentPage}</span>
+              <!-- Умная нумерация страниц -->
+              <c:choose>
+                  <c:when test="${totalPages <= 7}">
+                      <!-- Если страниц мало, показываем все -->
+                      <c:forEach begin="1" end="${totalPages}" var="pageNum">
+                          <c:choose>
+                              <c:when test="${pageNum == currentPage}">
+                                  <span class="pagination-btn current-page">${pageNum}</span>
+                              </c:when>
+                              <c:otherwise>
+                                  <a class="pagination-btn" href="${pageContext.request.contextPath}/matches?page=${pageNum}&filter_by_player_name=${fn:escapeXml(filter)}">${pageNum}</a>
+                              </c:otherwise>
+                          </c:choose>
+                      </c:forEach>
+                  </c:when>
+                  <c:otherwise>
+                      <!-- Если страниц много, показываем урезанный список -->
+                      <!-- Всегда показываем первую страницу -->
+                      <c:choose>
+                          <c:when test="${1 == currentPage}">
+                              <span class="pagination-btn current-page">1</span>
+                          </c:when>
+                          <c:otherwise>
+                              <a class="pagination-btn" href="${pageContext.request.contextPath}/matches?page=1&filter_by_player_name=${fn:escapeXml(filter)}">1</a>
+                          </c:otherwise>
+                      </c:choose>
 
-        <c:if test="${hasNext}">
-          <a
-            class="next"
-            href="${pageContext.request.contextPath}/matches
-                  ?page=${currentPage + 1}
-                  &filter_by_player_name=${fn:escapeXml(filter)}"
-          >&gt;</a>
-        </c:if>
-      </div>
+                      <c:if test="${currentPage > 4}">
+                          <span class="pagination-ellipsis">...</span>
+                      </c:if>
+
+                      <!-- Показываем страницы вокруг текущей -->
+                      <c:forEach var="pageNum" begin="${currentPage - 2 > 2 ? currentPage - 2 : 2}"
+                                 end="${currentPage + 2 < totalPages - 1 ? currentPage + 2 : totalPages - 1}">
+                          <c:choose>
+                              <c:when test="${pageNum == currentPage}">
+                                  <span class="pagination-btn current-page">${pageNum}</span>
+                              </c:when>
+                              <c:otherwise>
+                                  <a class="pagination-btn" href="${pageContext.request.contextPath}/matches?page=${pageNum}&filter_by_player_name=${fn:escapeXml(filter)}">${pageNum}</a>
+                              </c:otherwise>
+                          </c:choose>
+                      </c:forEach>
+
+                      <c:if test="${currentPage < totalPages - 3}">
+                          <span class="pagination-ellipsis">...</span>
+                      </c:if>
+
+                      <!-- Всегда показываем последнюю страницу -->
+                      <c:choose>
+                          <c:when test="${totalPages == currentPage}">
+                              <span class="pagination-btn current-page">${totalPages}</span>
+                          </c:when>
+                          <c:otherwise>
+                              <a class="pagination-btn" href="${pageContext.request.contextPath}/matches?page=${totalPages}&filter_by_player_name=${fn:escapeXml(filter)}">${totalPages}</a>
+                          </c:otherwise>
+                      </c:choose>
+                  </c:otherwise>
+              </c:choose>
+
+              <!-- Кнопка "Следующая" -->
+              <c:if test="${currentPage < totalPages}">
+                  <a class="pagination-btn next-btn"
+                     href="${pageContext.request.contextPath}/matches?page=${currentPage + 1}&filter_by_player_name=${fn:escapeXml(filter)}">
+                      Next >
+                  </a>
+              </c:if>
+          </div>
+      </c:if>
     </c:if>
   </div>
 </main>

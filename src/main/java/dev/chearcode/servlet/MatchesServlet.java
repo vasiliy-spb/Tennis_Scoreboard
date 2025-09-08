@@ -40,15 +40,23 @@ public class MatchesServlet extends HttpServlet {
         int offset = (page - 1) * MATCHES_PER_PAGE;
 
         List<Match> matches;
+        long totalMatches;
         if (filter != null && !filter.isBlank()) {
             matches = matchService.getAllByName(filter, MATCHES_PER_PAGE, offset);
+            totalMatches = matchService.countAllByPlayer(filter);
         } else {
             matches = matchService.getAll(MATCHES_PER_PAGE, offset);
+            totalMatches = matchService.countAll();
         }
+
+        int totalPages = (int) Math.ceil((double) totalMatches / MATCHES_PER_PAGE);
 
         req.setAttribute("matches", matches);
         req.setAttribute("currentPage", page);
         req.setAttribute("filter", filter == null ? "" : filter.trim());
+        req.setAttribute("totalPages", totalPages);
+        req.setAttribute("hasPrev", page > 1);
+        req.setAttribute("hasNext", page < totalPages);
 
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("matches.jsp");
         requestDispatcher.forward(req, resp);

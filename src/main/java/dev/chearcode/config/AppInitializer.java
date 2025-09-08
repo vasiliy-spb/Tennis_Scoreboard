@@ -31,6 +31,9 @@ public class AppInitializer implements ServletContextListener {
 
         MatchService matchService = new MatchService(playerRepository, matchRepository, ongoingMatchesService);
         sce.getServletContext().setAttribute(ContextAttribute.MATCH_SERVICE, matchService);
+
+        TestDataInitializer testDataInitializer = new TestDataInitializer(playerRepository, matchRepository);
+        testDataInitializer.initialize(77, TestDataInitializer.NameSet.COMICS);
     }
 
     @Override
