@@ -3,11 +3,12 @@ package dev.chearcode.service;
 import dev.chearcode.entity.Player;
 import dev.chearcode.model.TennisMatch;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class OngoingMatchesService {
-    private final ConcurrentHashMap<UUID, TennisMatch> matches;
+    private final Map<UUID, TennisMatch> matches;
 
     public OngoingMatchesService() {
         this.matches = new ConcurrentHashMap<>();
