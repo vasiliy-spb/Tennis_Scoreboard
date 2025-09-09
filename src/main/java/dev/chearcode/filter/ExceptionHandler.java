@@ -31,7 +31,7 @@ public class ExceptionHandler extends HttpFilter {
         req.setAttribute("statusCode", statusCode);
 
         if (e instanceof ValidationException) {
-            String path = req.getServletPath() + ".jsp";
+            String path = "/WEB-INF/jsp" + req.getServletPath() + ".jsp";
             forwardTo(req, path, res);
             return;
         }
