@@ -1,6 +1,7 @@
 package dev.chearcode.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.chearcode.exception.EntityNotFoundException;
 import dev.chearcode.exception.ValidationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.RequestDispatcher;
@@ -44,7 +45,7 @@ public class ExceptionHandler extends HttpFilter {
     }
 
     private int getStatusCode(Exception e) {
-        if (e instanceof ValidationException) {
+        if (e instanceof EntityNotFoundException) {
             return HttpServletResponse.SC_BAD_REQUEST;
         }
         return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;

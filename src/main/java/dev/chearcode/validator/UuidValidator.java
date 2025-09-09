@@ -4,7 +4,10 @@ import dev.chearcode.exception.ValidationException;
 
 import java.util.UUID;
 
-public class UuidValidator {
+public final class UuidValidator {
+    private UuidValidator() {
+    }
+
     public static void validate(String uuid) {
         if (uuid == null || uuid.isBlank()) {
             throw new ValidationException("UUID must not be blank");

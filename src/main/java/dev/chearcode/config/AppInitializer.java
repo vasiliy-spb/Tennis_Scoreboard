@@ -12,6 +12,8 @@ import jakarta.servlet.annotation.WebListener;
 
 @WebListener
 public class AppInitializer implements ServletContextListener {
+    private static final int INIT_MATCH_COUNT = 214;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContextListener.super.contextInitialized(sce);
@@ -29,7 +31,7 @@ public class AppInitializer implements ServletContextListener {
         sce.getServletContext().setAttribute(ContextAttribute.MATCH_SERVICE, matchService);
 
         TestDataInitializer testDataInitializer = new TestDataInitializer(playerRepository, matchRepository);
-        testDataInitializer.initialize(214, TestDataInitializer.NameSet.COMICS);
+        testDataInitializer.initialize(INIT_MATCH_COUNT, TestDataInitializer.NameSet.COMICS);
     }
 
     @Override
