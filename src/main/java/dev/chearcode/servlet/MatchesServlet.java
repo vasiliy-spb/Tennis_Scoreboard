@@ -63,17 +63,17 @@ public class MatchesServlet extends HttpServlet {
 
     private long getTotalMatches(String filter) {
         if (isNotExists(filter)) {
-            return matchService.countAllByPlayer(filter);
+            return matchService.countAll();
         }
-        return matchService.countAll();
+        return matchService.countAllByPlayer(filter);
     }
 
     private List<Match> getMatches(String filter, int page) {
         int offset = (page - 1) * MATCHES_PER_PAGE;
         if (isNotExists(filter)) {
-            return matchService.getAllByName(filter, MATCHES_PER_PAGE, offset);
+            return matchService.getAll(MATCHES_PER_PAGE, offset);
         }
-        return matchService.getAll(MATCHES_PER_PAGE, offset);
+        return matchService.getAllByName(filter, MATCHES_PER_PAGE, offset);
     }
 
     private boolean isNotExists(String filter) {
