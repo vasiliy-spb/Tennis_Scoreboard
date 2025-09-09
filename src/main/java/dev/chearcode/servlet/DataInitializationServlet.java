@@ -33,7 +33,7 @@ public class DataInitializationServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int matchCount = Integer.parseInt(req.getParameter("matchCount"));
         String nameSetParam = req.getParameter("nameSet");
         TestDataInitializer.NameSet nameSet = TestDataInitializer.NameSet.valueOf(nameSetParam);

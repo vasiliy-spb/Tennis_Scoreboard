@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @WebServlet("/match-score")
@@ -27,7 +29,8 @@ public class MatchScoreServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        this.ongoingMatchesService = (OngoingMatchesService) getServletContext().getAttribute(ContextAttribute.ONGOING_MATCH_SERVICE);
+        this.ongoingMatchesService =
+                (OngoingMatchesService) getServletContext().getAttribute(ContextAttribute.ONGOING_MATCH_SERVICE);
         this.matchRepository = (MatchRepository) getServletContext().getAttribute(ContextAttribute.MATCH_REPOSITORY);
     }
 
@@ -114,13 +117,12 @@ public class MatchScoreServlet extends HttpServlet {
     }
 
     private Player definePointWinner(TennisMatch tennisMatch, UUID playerId) {
-        if (tennisMatch.getFirstPlayer().getId().equals(playerId)) {
-            return tennisMatch.getFirstPlayer();
-        }
-        if (tennisMatch.getSecondPlayer().getId().equals(playerId)) {
-            return tennisMatch.getSecondPlayer();
-        }
-        throw new EntityNotFoundException("Player not found in this match");
+        Map<UUID, Player> players = Map.of(
+                tennisMatch.getFirstPlayer().getId(), tennisMatch.getFirstPlayer(),
+                tennisMatch.getSecondPlayer().getId(), tennisMatch.getSecondPlayer()
+        );
+        return Optional.ofNullable(players.get(playerId))
+                .orElseThrow(() -> new EntityNotFoundException("Player not found in this match"));
     }
 
     private void saveMathResult(TennisMatch tennisMatch) {

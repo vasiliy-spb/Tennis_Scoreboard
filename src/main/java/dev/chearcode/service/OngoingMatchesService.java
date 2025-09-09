@@ -13,16 +13,16 @@ public class OngoingMatchesService {
         this.matches = new ConcurrentHashMap<>();
     }
 
+    public void addNewMatch(UUID matchId, TennisMatch match) {
+        matches.put(matchId, match);
+    }
+
     public void pointWonBy(UUID matchId, Player player) {
         matches.computeIfPresent(matchId, (id, match) ->
         {
             match.pointWonBy(player);
             return match;
         });
-    }
-
-    public void addNewMatch(UUID matchId, TennisMatch match) {
-        matches.put(matchId, match);
     }
 
     public TennisMatch get(UUID matchId) {

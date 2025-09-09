@@ -44,12 +44,30 @@ public class MatchService {
         return player;
     }
 
+    public List<Match> getMatches(String filter, int limit, int offset) {
+        if (isNotExists(filter)) {
+            return getAll(limit, offset);
+        }
+        return getAllByName(filter, limit, offset);
+    }
+
+    private boolean isNotExists(String filter) {
+        return filter == null || filter.isBlank();
+    }
+
     public List<Match> getAll(int limit, int offset) {
         return matchRepository.findAll(limit, offset);
     }
 
     public List<Match> getAllByName(String name, int limit, int offset) {
         return matchRepository.findAllByPlayer(name, limit, offset);
+    }
+
+    public long getTotalMatches(String filter) {
+        if (isNotExists(filter)) {
+            return countAll();
+        }
+        return countAllByPlayer(filter);
     }
 
     public long countAll() {
