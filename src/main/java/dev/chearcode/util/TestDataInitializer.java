@@ -1,4 +1,4 @@
-package dev.chearcode.config;
+package dev.chearcode.util;
 
 import dev.chearcode.entity.Match;
 import dev.chearcode.entity.Player;
@@ -26,12 +26,23 @@ public class TestDataInitializer {
     private Map<String, Player> createPlayers(NameSet nameSet) {
         Map<String, Player> playerMap = new HashMap<>();
         for (String name : nameSet.names()) {
-            Player player = new Player(name);
-            UUID id = playerRepository.save(player);
-            player.setId(id);
-            playerMap.put(name, player);
+            Player player = getPlayer(name);
+            playerMap.putIfAbsent(name, player);
         }
         return playerMap;
+    }
+
+    private Player getPlayer(String name) {
+        String clearName = name.trim();
+        return playerRepository.findByName(clearName)
+                .orElseGet(() -> createPlayer(clearName));
+    }
+
+    private Player createPlayer(String name) {
+        Player player = new Player(name);
+        UUID id = playerRepository.save(player);
+        player.setId(id);
+        return player;
     }
 
     private void createMatches(int matchCount, NameSet nameSet, Map<String, Player> playerMap) {

@@ -3,7 +3,7 @@ package dev.chearcode.servlet;
 import dev.chearcode.config.ContextAttribute;
 import dev.chearcode.repository.MatchRepository;
 import dev.chearcode.repository.PlayerRepository;
-import dev.chearcode.config.TestDataInitializer;
+import dev.chearcode.util.TestDataInitializer;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
