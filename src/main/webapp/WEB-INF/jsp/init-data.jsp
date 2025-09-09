@@ -30,7 +30,7 @@
 </header>
 <main>
     <div class="container">
-        <h1>Initialize Test Data</h1>
+        <h1>Add Data</h1>
         <div class="init-data-image"></div>
         <div class="form-container center">
             <form method="post" action="${pageContext.request.contextPath}/init-data">
@@ -48,7 +48,7 @@
                     </select>
                 </div>
 
-                <input class="form-button" type="submit" value="Initialize Data">
+                <input class="form-button" type="submit" value="Generate Data">
             </form>
         </div>
     </div>

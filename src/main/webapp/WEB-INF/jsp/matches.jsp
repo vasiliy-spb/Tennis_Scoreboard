@@ -31,7 +31,7 @@
     </div>
     <nav class="nav-links">
       <a class="nav-link" href="${pageContext.request.contextPath}/index">Home</a>
-      <a class="nav-link" href="${pageContext.request.contextPath}/init-data">Initialize Data</a>
+      <a class="nav-link" href="${pageContext.request.contextPath}/init-data">Add Data</a>
     </nav>
   </section>
 </header>
