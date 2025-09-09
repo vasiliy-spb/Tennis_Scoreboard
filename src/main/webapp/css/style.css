@@ -692,3 +692,21 @@ footer {
     width: 100%;
   }
 }
+
+.init-data-image {
+    border-radius: 30px;
+    margin-top: 20px;
+    background-image: url('../images/init_data_image.png');
+    background-position: center;
+    min-height: 50vh;
+    background-size: cover;
+}
+
+.frame-matches-image {
+    border-radius: 30px;
+    margin-top: 20px;
+    background-image: url('../images/frame_matches.png');
+    background-position: center;
+    min-height: 50vh;
+    background-size: cover;
+}

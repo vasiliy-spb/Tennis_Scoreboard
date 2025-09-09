@@ -4,7 +4,6 @@ import dev.chearcode.entity.Match;
 import dev.chearcode.entity.Player;
 import dev.chearcode.repository.MatchRepository;
 import dev.chearcode.repository.PlayerRepository;
-import org.hibernate.Transaction;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -19,52 +18,40 @@ public class TestDataInitializer {
     }
 
     public void initialize(int matchCount, NameSet nameSet) {
-        Transaction transaction = HibernateManager.getSession().beginTransaction();
+        Map<String, Player> playerMap = createPlayers(nameSet);
 
-        try {
-            if (!playerRepository.findAll(1, 0).isEmpty()) {
-                System.out.println("Test data already exists. Skipping initialization.");
-                transaction.commit();
-                return;
+        createMatches(matchCount, nameSet, playerMap);
+    }
+
+    private Map<String, Player> createPlayers(NameSet nameSet) {
+        Map<String, Player> playerMap = new HashMap<>();
+        for (String name : nameSet.names()) {
+            Player player = new Player(name);
+            UUID id = playerRepository.save(player);
+            player.setId(id);
+            playerMap.put(name, player);
+        }
+        return playerMap;
+    }
+
+    private void createMatches(int matchCount, NameSet nameSet, Map<String, Player> playerMap) {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        List<String> nameList = new ArrayList<>(nameSet.names());
+
+        for (int i = 0; i < matchCount; i++) {
+            int firstIndex = random.nextInt(nameList.size());
+            int secondIndex = random.nextInt(nameList.size());
+
+            while (firstIndex == secondIndex) {
+                secondIndex = random.nextInt(nameList.size());
             }
 
-            System.out.println("Initializing database with " + matchCount + " test matches...");
+            Player player1 = playerMap.get(nameList.get(firstIndex));
+            Player player2 = playerMap.get(nameList.get(secondIndex));
 
-            Map<String, Player> playerMap = new HashMap<>();
-            for (String name : nameSet.names()) {
-                Player player = new Player(name);
-                UUID id = playerRepository.save(player);
-                player.setId(id);
-                playerMap.put(name, player);
-            }
+            Player winner = random.nextBoolean() ? player1 : player2;
 
-            ThreadLocalRandom random = ThreadLocalRandom.current();
-            List<String> nameList = new ArrayList<>(nameSet.names());
-
-            for (int i = 0; i < matchCount; i++) {
-                int firstIndex = random.nextInt(nameList.size());
-                int secondIndex = random.nextInt(nameList.size());
-
-                while (firstIndex == secondIndex) {
-                    secondIndex = random.nextInt(nameList.size());
-                }
-
-                Player player1 = playerMap.get(nameList.get(firstIndex));
-                Player player2 = playerMap.get(nameList.get(secondIndex));
-
-                Player winner = random.nextBoolean() ? player1 : player2;
-
-                createMatch(player1, player2, winner);
-            }
-
-            transaction.commit();
-            System.out.println("Test data initialization completed. Generated " + matchCount + " matches.");
-
-        } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Failed to initialize test data", e);
+            createMatch(player1, player2, winner);
         }
     }
 
@@ -76,7 +63,7 @@ public class TestDataInitializer {
         matchRepository.save(match);
     }
 
-    enum NameSet {
+    public enum NameSet {
         REAL(List.of(
                 // top tennis players
                 "Roger Federer", "Rafael Nadal", "Novak Djokovic", "Andy Murray", "Stan Wawrinka",

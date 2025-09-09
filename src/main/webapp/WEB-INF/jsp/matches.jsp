@@ -31,7 +31,7 @@
     </div>
     <nav class="nav-links">
       <a class="nav-link" href="${pageContext.request.contextPath}/index">Home</a>
-      <a class="nav-link" href="${pageContext.request.contextPath}/matches">Matches</a>
+      <a class="nav-link" href="${pageContext.request.contextPath}/init-data">Initialize Data</a>
     </nav>
   </section>
 </header>
@@ -39,6 +39,7 @@
 <main>
   <div class="container">
     <h1>Matches</h1>
+    <div class="frame-matches-image"></div>
 
     <div class="input-container">
       <form method="get" action="${pageContext.request.contextPath}/matches" class="filter-form">

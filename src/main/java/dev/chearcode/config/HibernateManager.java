@@ -19,6 +19,16 @@ public class HibernateManager {
     private HibernateManager() {
     }
 
+    public static void init(){}
+
+    public static Session getSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
+    public static void closeSessionFactory() {
+        sessionFactory.close();
+    }
+
     private static SessionFactory buildSessionFactory() {
 
         DatabaseConsoleManager.runConsoleServer(8082);
@@ -49,13 +59,5 @@ public class HibernateManager {
             System.err.println("Initial SessionFactory creation failed: " + e);
             throw new ExceptionInInitializerError(e);
         }
-    }
-
-    public static Session getSession() {
-        return sessionFactory.getCurrentSession();
-    }
-
-    public static void closeSessionFactory() {
-        sessionFactory.close();
     }
 }
