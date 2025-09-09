@@ -47,13 +47,17 @@ public class NewMatchServlet extends HttpServlet {
                 req.getParameter("secondPlayerName")
         );
 
-        Set<ConstraintViolation<CreateMatchRequestDto>> violations = validator.validate(requestDto);
-        if (!violations.isEmpty()) {
-            throw new ValidationException(violations);
-        }
+        validate(requestDto);
 
         UUID matchId = matchService.add(requestDto);
 
         resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + matchId);
+    }
+
+    private void validate(CreateMatchRequestDto requestDto) {
+        Set<ConstraintViolation<CreateMatchRequestDto>> violations = validator.validate(requestDto);
+        if (!violations.isEmpty()) {
+            throw new ValidationException(violations);
+        }
     }
 }

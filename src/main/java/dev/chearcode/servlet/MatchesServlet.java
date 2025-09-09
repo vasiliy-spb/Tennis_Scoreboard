@@ -29,27 +29,10 @@ public class MatchesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String filter = req.getParameter("filter_by_player_name");
         String pageParam = req.getParameter("page");
-        int page = 1;
-        if (pageParam != null) {
-            try {
-                page = Integer.parseInt(pageParam);
-            } catch (NumberFormatException ignored) {
-            }
-        }
 
-        int offset = (page - 1) * MATCHES_PER_PAGE;
-
-        List<Match> matches;
-        long totalMatches;
-        if (filter != null && !filter.isBlank()) {
-            matches = matchService.getAllByName(filter, MATCHES_PER_PAGE, offset);
-            totalMatches = matchService.countAllByPlayer(filter);
-        } else {
-            matches = matchService.getAll(MATCHES_PER_PAGE, offset);
-            totalMatches = matchService.countAll();
-        }
-
-        int totalPages = (int) Math.ceil((double) totalMatches / MATCHES_PER_PAGE);
+        int page = getPage(pageParam);
+        List<Match> matches = getMatches(filter, page);
+        int totalPages = calculateTotalPages(filter);
 
         req.setAttribute("matches", matches);
         req.setAttribute("currentPage", page);
@@ -60,5 +43,40 @@ public class MatchesServlet extends HttpServlet {
 
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/jsp/matches.jsp");
         requestDispatcher.forward(req, resp);
+    }
+
+    private int getPage(String pageParam) {
+        int page = 1;
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return page;
+    }
+
+    private int calculateTotalPages(String filter) {
+        long totalMatches = getTotalMatches(filter);
+        return (int) Math.ceil((double) totalMatches / MATCHES_PER_PAGE);
+    }
+
+    private long getTotalMatches(String filter) {
+        if (isNotExists(filter)) {
+            return matchService.countAllByPlayer(filter);
+        }
+        return matchService.countAll();
+    }
+
+    private List<Match> getMatches(String filter, int page) {
+        int offset = (page - 1) * MATCHES_PER_PAGE;
+        if (isNotExists(filter)) {
+            return matchService.getAllByName(filter, MATCHES_PER_PAGE, offset);
+        }
+        return matchService.getAll(MATCHES_PER_PAGE, offset);
+    }
+
+    private boolean isNotExists(String filter) {
+        return filter == null || filter.isBlank();
     }
 }

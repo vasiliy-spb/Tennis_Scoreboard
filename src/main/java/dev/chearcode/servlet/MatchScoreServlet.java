@@ -3,9 +3,11 @@ package dev.chearcode.servlet;
 import dev.chearcode.config.ContextAttribute;
 import dev.chearcode.entity.Match;
 import dev.chearcode.entity.Player;
+import dev.chearcode.exception.EntityNotFoundException;
 import dev.chearcode.model.TennisMatch;
 import dev.chearcode.repository.MatchRepository;
 import dev.chearcode.service.OngoingMatchesService;
+import dev.chearcode.validator.UuidValidator;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -31,30 +33,28 @@ public class MatchScoreServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String uuidString = req.getParameter("uuid");
-        if (uuidString == null || uuidString.isBlank()) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing uuid parameter");
-            return;
-        }
+        UUID uuid = getUuidParam("uuid", req);
 
-        UUID uuid;
-        try {
-            uuid = UUID.fromString(uuidString);
-        } catch (IllegalArgumentException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid uuid format");
-            return;
-        }
-
-        TennisMatch tennisMatch = ongoingMatchesService.get(uuid);
-        if (tennisMatch == null) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Match not found");
-            return;
-        }
+        TennisMatch tennisMatch = getOngoingMatch(uuid);
 
         putMatchAttributes(req, uuid, tennisMatch);
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/jsp/match-score.jsp");
-        requestDispatcher.forward(req, resp);
+        refreshPage(req, resp);
+    }
+
+    private UUID getUuidParam(String uuid, HttpServletRequest req) {
+        String matchIdString = req.getParameter(uuid);
+        UuidValidator.validate(matchIdString);
+        UUID matchId = UUID.fromString(matchIdString);
+        return matchId;
+    }
+
+    private TennisMatch getOngoingMatch(UUID uuid) {
+        TennisMatch tennisMatch = ongoingMatchesService.get(uuid);
+        if (tennisMatch == null) {
+            throw new EntityNotFoundException("Match not found");
+        }
+        return tennisMatch;
     }
 
     private void putMatchAttributes(HttpServletRequest req, UUID uuid, TennisMatch match) {
@@ -83,56 +83,51 @@ public class MatchScoreServlet extends HttpServlet {
         }
     }
 
+    private void refreshPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/jsp/match-score.jsp");
+        requestDispatcher.forward(req, resp);
+    }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String matchIdString = req.getParameter("uuid");
-        String playerIdString = req.getParameter("playerId");
+        UUID matchId = getUuidParam("uuid", req);
+        UUID playerId = getUuidParam("playerId", req);
 
-        if (matchIdString == null || matchIdString.isBlank() || playerIdString == null || playerIdString.isBlank()) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters");
-            return;
-        }
+        TennisMatch tennisMatch = getOngoingMatch(matchId);
 
-        UUID matchId;
-        UUID playerId;
-        try {
-            matchId = UUID.fromString(matchIdString);
-            playerId = UUID.fromString(playerIdString);
-        } catch (IllegalArgumentException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect uuid format");
-            return;
-        }
+        Player player = definePointWinner(tennisMatch, playerId);
 
-        TennisMatch tennisMatch = ongoingMatchesService.get(matchId);
-        if (tennisMatch == null) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Match not found");
-            return;
-        }
-
-        Player player;
-        if (tennisMatch.getFirstPlayer().getId().equals(playerId)) {
-            player = tennisMatch.getFirstPlayer();
-        } else if (tennisMatch.getSecondPlayer().getId().equals(playerId)) {
-            player = tennisMatch.getSecondPlayer();
-        } else {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Player not found in this match");
-            return;
-        }
-
-        ongoingMatchesService.pointWonBy(matchId, player);
-
-        if (tennisMatch.isFinished()) {
-            Match match = new Match();
-            match.setFirstPlayer(tennisMatch.getFirstPlayer());
-            match.setSecondPlayer(tennisMatch.getSecondPlayer());
-            match.setWinner(tennisMatch.getWinner());
-            matchRepository.save(match);
-            ongoingMatchesService.remove(matchId);
-        }
+        processWinningPoint(player, tennisMatch, matchId);
 
         putMatchAttributes(req, matchId, tennisMatch);
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/jsp/match-score.jsp");
-        requestDispatcher.forward(req, resp);
+        refreshPage(req, resp);
+    }
+
+    private void processWinningPoint(Player player, TennisMatch tennisMatch, UUID matchId) {
+        ongoingMatchesService.pointWonBy(matchId, player);
+
+        if (tennisMatch.isFinished()) {
+            saveMathResult(tennisMatch);
+            ongoingMatchesService.remove(matchId);
+        }
+    }
+
+    private Player definePointWinner(TennisMatch tennisMatch, UUID playerId) {
+        if (tennisMatch.getFirstPlayer().getId().equals(playerId)) {
+            return tennisMatch.getFirstPlayer();
+        }
+        if (tennisMatch.getSecondPlayer().getId().equals(playerId)) {
+            return tennisMatch.getSecondPlayer();
+        }
+        throw new EntityNotFoundException("Player not found in this match");
+    }
+
+    private void saveMathResult(TennisMatch tennisMatch) {
+        Match match = new Match();
+        match.setFirstPlayer(tennisMatch.getFirstPlayer());
+        match.setSecondPlayer(tennisMatch.getSecondPlayer());
+        match.setWinner(tennisMatch.getWinner());
+        matchRepository.save(match);
     }
 }
