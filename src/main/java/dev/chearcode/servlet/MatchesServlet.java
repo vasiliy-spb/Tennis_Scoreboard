@@ -58,7 +58,7 @@ public class MatchesServlet extends HttpServlet {
         req.setAttribute("hasPrev", page > 1);
         req.setAttribute("hasNext", page < totalPages);
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("matches.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/jsp/matches.jsp");
         requestDispatcher.forward(req, resp);
     }
 }

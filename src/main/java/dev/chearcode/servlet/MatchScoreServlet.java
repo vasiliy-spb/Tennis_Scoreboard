@@ -53,7 +53,7 @@ public class MatchScoreServlet extends HttpServlet {
 
         putMatchAttributes(req, uuid, tennisMatch);
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("match-score.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/jsp/match-score.jsp");
         requestDispatcher.forward(req, resp);
     }
 
@@ -132,7 +132,7 @@ public class MatchScoreServlet extends HttpServlet {
 
         putMatchAttributes(req, matchId, tennisMatch);
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("match-score.jsp");
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/jsp/match-score.jsp");
         requestDispatcher.forward(req, resp);
     }
 }
