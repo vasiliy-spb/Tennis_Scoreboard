@@ -1,6 +1,6 @@
 package dev.chearcode.dto;
 
-import dev.chearcode.validator.ValidMatch;
+import dev.chearcode.validation.ValidMatch;
 
 @ValidMatch
 public record CreateMatchRequestDto(

@@ -1,4 +1,4 @@
-package dev.chearcode.validator;
+package dev.chearcode.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

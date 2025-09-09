@@ -34,6 +34,7 @@ public class ExceptionHandler extends HttpFilter {
             String path = req.getServletPath() + ".jsp";
             RequestDispatcher dispatcher = req.getRequestDispatcher(path);
             dispatcher.forward(req, res);
+            return;
         }
 
         int statusCode = getStatusCode(e);

@@ -1,4 +1,4 @@
-package dev.chearcode.validator;
+package dev.chearcode.validation;
 
 import dev.chearcode.exception.ValidationException;
 

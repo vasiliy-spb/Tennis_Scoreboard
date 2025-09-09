@@ -7,7 +7,7 @@ import dev.chearcode.exception.EntityNotFoundException;
 import dev.chearcode.model.TennisMatch;
 import dev.chearcode.repository.MatchRepository;
 import dev.chearcode.service.OngoingMatchesService;
-import dev.chearcode.validator.UuidValidator;
+import dev.chearcode.validation.UuidValidator;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
