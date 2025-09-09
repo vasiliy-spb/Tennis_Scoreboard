@@ -1,4 +1,5 @@
 package dev.chearcode.validation;
+
 public enum Limits {
     MIN_NAME_LENGTH(2),
     MAX_NAME_LENGTH(120),

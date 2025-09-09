@@ -7,30 +7,10 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
+import static dev.chearcode.validation.Limits.*;
+import static dev.chearcode.validation.Messages.*;
+
 public class MatchValidator implements ConstraintValidator<ValidMatch, CreateMatchRequestDto> {
-    private static final int MIN_NAME_LENGTH = 2;
-    private static final int MAX_NAME_LENGTH = 120;
-    private static final int MIN_NAME_PART_LENGTH = 2;
-    private static final int MAX_NAME_PART_LENGTH = 30;
-    private static final int MAX_DOTS = 2;
-    private static final int MAX_APOSTROPHES = 2;
-    private static final int MAX_HYPHENS = 2;
-    private static final int MIN_LETTERS = 2;
-    private static final String SAME_NAME_MESSAGE = "names must be different";
-    private static final String BLANK_NAME_MESSAGE = "name must not be blank";
-    private static final String TOO_LONG_NAME_MESSAGE = "name length must be less then " + MAX_NAME_LENGTH;
-    private static final String TOO_LONG_NAME_PART_MESSAGE = "name part length must be less then " + MAX_NAME_PART_LENGTH;
-    private static final String CONTAINS_DIGITS_MESSAGE = "name must not contains digits";
-    private static final String INVALID_CHARACTERS_MESSAGE = "name contains invalid characters";
-    private static final String TOO_MANY_DOTS_MESSAGE = "name must contain at most two dots";
-    private static final String TOO_MANY_APOSTROPHES_MESSAGE = "name must contain at most two apostrophes";
-    private static final String TOO_MANY_HYPHENS_MESSAGE = "name must contain at most two hyphens";
-    private static final String TOO_FEW_LETTERS_MESSAGE = "name must contain at least two letters";
-    private static final String MULTIPLE_SPACES_MESSAGE = "name must not contain multiple consecutive spaces";
-    private static final String INVALID_START_END_MESSAGE = "name must not start or end with a space, dot, apostrophe or hyphen";
-    private static final String ISOLATED_SPECIAL_CHAR_MESSAGE = "special characters must not be surrounded by spaces";
-    private static final String CONSECUTIVE_SPECIAL_CHARS_MESSAGE = "special characters must not appear consecutively";
-    private static final String FORBIDDEN_COMBINATION_MESSAGE = "apostrophe and hyphen must not appear next to each other";
     private static final Pattern VALID_CHARS_PATTERN = Pattern.compile("^[\\p{L}\\s.'-]+$");
     private static final Pattern ISOLATED_SPECIAL_CHARS_PATTERN = Pattern.compile(".*\\s[.'-]\\s.*");
     private static final Pattern CONSECUTIVE_SPECIAL_CHARS_PATTERN = Pattern.compile(".*([.'-]{2,}).*");
@@ -57,7 +37,7 @@ public class MatchValidator implements ConstraintValidator<ValidMatch, CreateMat
 
     private boolean checkIfDifferentName(String firstPlayerName, String secondPlayerName, ConstraintValidatorContext context) {
         if (firstPlayerName.equalsIgnoreCase(secondPlayerName)) {
-            setMessage(context, SAME_NAME_MESSAGE);
+            setMessage(context, SAME_NAME_MESSAGE.getMessage());
             return false;
         }
         return true;
@@ -71,72 +51,82 @@ public class MatchValidator implements ConstraintValidator<ValidMatch, CreateMat
 
     private boolean checkCorrectName(String name, ConstraintValidatorContext context) {
         if (isEmpty(name)) {
-            setMessage(context, BLANK_NAME_MESSAGE);
+            setMessage(context, BLANK_NAME_MESSAGE.getMessage());
             return false;
         }
 
-        if (!hasCorrectLength(name)) {
-            setMessage(context, TOO_LONG_NAME_MESSAGE);
+        if (hasTooLongLength(name)) {
+            setMessage(context, TOO_LONG_NAME_MESSAGE.getMessage());
             return false;
         }
 
-        if (!hasCorrectPartsLength(name)) {
-            setMessage(context, TOO_LONG_NAME_PART_MESSAGE);
+        if (hasTooSmallLength(name)) {
+            setMessage(context, TOO_SMALL_NAME_MESSAGE.getMessage());
+            return false;
+        }
+
+        if (hasTooLongPartLength(name)) {
+            setMessage(context, TOO_LONG_NAME_PART_MESSAGE.getMessage());
+            return false;
+        }
+
+        if (hasTooSmallPartLength(name)) {
+            setMessage(context, TOO_SMALL_NAME_PART_MESSAGE.getMessage());
             return false;
         }
 
         if (containsDigits(name)) {
-            setMessage(context, CONTAINS_DIGITS_MESSAGE);
+            setMessage(context, CONTAINS_DIGITS_MESSAGE.getMessage());
             return false;
         }
 
-        if (!containsValidCharacters(name)) {
-            setMessage(context, INVALID_CHARACTERS_MESSAGE);
+        if (!containsValidCharactersOnly(name)) {
+            setMessage(context, INVALID_CHARACTERS_MESSAGE.getMessage());
             return false;
         }
 
-        if (countCharacters(name, '.') > MAX_DOTS) {
-            setMessage(context, TOO_MANY_DOTS_MESSAGE);
+        if (countCharacters(name, '.') > MAX_DOTS.getValue()) {
+            setMessage(context, TOO_MANY_DOTS_MESSAGE.getMessage());
             return false;
         }
 
-        if (countCharacters(name, '\'') > MAX_APOSTROPHES) {
-            setMessage(context, TOO_MANY_APOSTROPHES_MESSAGE);
+        if (countCharacters(name, '\'') > MAX_APOSTROPHES.getValue()) {
+            setMessage(context, TOO_MANY_APOSTROPHES_MESSAGE.getMessage());
             return false;
         }
 
-        if (countCharacters(name, '-') > MAX_HYPHENS) {
-            setMessage(context, TOO_MANY_HYPHENS_MESSAGE);
+        if (countCharacters(name, '-') > MAX_HYPHENS.getValue()) {
+            setMessage(context, TOO_MANY_HYPHENS_MESSAGE.getMessage());
             return false;
         }
 
-        if (countLetters(name) < MIN_LETTERS) {
-            setMessage(context, TOO_FEW_LETTERS_MESSAGE);
+        if (countLetters(name) < MIN_LETTERS.getValue()) {
+            setMessage(context, TOO_FEW_LETTERS_MESSAGE.getMessage());
             return false;
         }
 
         if (hasMultipleSpaces(name)) {
-            setMessage(context, MULTIPLE_SPACES_MESSAGE);
+            setMessage(context, MULTIPLE_SPACES_MESSAGE.getMessage());
             return false;
         }
 
-        if (startsOrEndsWithInvalidChar(name)) {
-            setMessage(context, INVALID_START_END_MESSAGE);
+        if (startsOrEndsWithInvalidCharacters(name)) {
+            setMessage(context, INVALID_START_END_MESSAGE.getMessage());
             return false;
         }
 
-        if (hasIsolatedSpecialChars(name)) {
-            setMessage(context, ISOLATED_SPECIAL_CHAR_MESSAGE);
+        if (hasIsolatedSpecialCharacters(name)) {
+            setMessage(context, ISOLATED_SPECIAL_CHAR_MESSAGE.getMessage());
             return false;
         }
 
-        if (hasConsecutiveSpecialChars(name)) {
-            setMessage(context, CONSECUTIVE_SPECIAL_CHARS_MESSAGE);
+        if (hasConsecutiveSpecialCharacters(name)) {
+            setMessage(context, CONSECUTIVE_SPECIAL_CHARS_MESSAGE.getMessage());
             return false;
         }
 
         if (hasForbiddenCombinations(name)) {
-            setMessage(context, FORBIDDEN_COMBINATION_MESSAGE);
+            setMessage(context, FORBIDDEN_COMBINATION_MESSAGE.getMessage());
             return false;
         }
 
@@ -147,16 +137,26 @@ public class MatchValidator implements ConstraintValidator<ValidMatch, CreateMat
         return name == null || name.isEmpty();
     }
 
-    private boolean hasCorrectLength(String name) {
-        return name.length() >= MIN_NAME_LENGTH && name.length() <= MAX_NAME_LENGTH;
+    private boolean hasTooLongLength(String name) {
+        return name.length() > MAX_NAME_LENGTH.getValue();
     }
 
-    private boolean hasCorrectPartsLength(String name) {
+    private boolean hasTooSmallLength(String name) {
+        return name.length() < MIN_NAME_LENGTH.getValue();
+    }
+
+    private boolean hasTooLongPartLength(String name) {
         return Arrays.stream(name.split("\\s+"))
                 .filter(part -> !part.isEmpty())
                 .map(String::length)
-                .allMatch(length -> length >= MIN_NAME_PART_LENGTH &&
-                                    length <= MAX_NAME_PART_LENGTH);
+                .anyMatch(length -> length > MAX_NAME_PART_LENGTH.getValue());
+    }
+
+    private boolean hasTooSmallPartLength(String name) {
+        return Arrays.stream(name.split("\\s+"))
+                .filter(part -> !part.isEmpty())
+                .map(String::length)
+                .anyMatch(length -> length < MIN_NAME_PART_LENGTH.getValue());
     }
 
     private boolean containsDigits(String name) {
@@ -164,7 +164,7 @@ public class MatchValidator implements ConstraintValidator<ValidMatch, CreateMat
                 .anyMatch(Character::isDigit);
     }
 
-    private boolean containsValidCharacters(String name) {
+    private boolean containsValidCharactersOnly(String name) {
         return VALID_CHARS_PATTERN.matcher(name).matches();
     }
 
@@ -180,7 +180,7 @@ public class MatchValidator implements ConstraintValidator<ValidMatch, CreateMat
         return name.contains("  ");
     }
 
-    private boolean startsOrEndsWithInvalidChar(String name) {
+    private boolean startsOrEndsWithInvalidCharacters(String name) {
         char firstChar = name.charAt(0);
         char lastChar = name.charAt(name.length() - 1);
 
@@ -188,11 +188,11 @@ public class MatchValidator implements ConstraintValidator<ValidMatch, CreateMat
                lastChar == ' ' || lastChar == '.' || lastChar == '\'' || lastChar == '-';
     }
 
-    private boolean hasIsolatedSpecialChars(String name) {
+    private boolean hasIsolatedSpecialCharacters(String name) {
         return ISOLATED_SPECIAL_CHARS_PATTERN.matcher(name).matches();
     }
 
-    private boolean hasConsecutiveSpecialChars(String name) {
+    private boolean hasConsecutiveSpecialCharacters(String name) {
         return CONSECUTIVE_SPECIAL_CHARS_PATTERN.matcher(name).matches();
     }
 
