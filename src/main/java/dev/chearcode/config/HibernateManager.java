@@ -2,6 +2,7 @@ package dev.chearcode.config;
 
 import dev.chearcode.entity.Match;
 import dev.chearcode.entity.Player;
+import dev.chearcode.util.DatabaseConsoleManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;

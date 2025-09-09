@@ -1,4 +1,4 @@
-package dev.chearcode.config;
+package dev.chearcode.util;
 
 import org.h2.tools.Server;
 
