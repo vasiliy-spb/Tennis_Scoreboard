@@ -7,13 +7,13 @@ import java.util.List;
 
 public class MatchRepositoryImpl extends BaseRepository<Match> implements MatchRepository {
     private static final String FIND_ALL_HQL = """
-        SELECT DISTINCT m
-        FROM Match m
-        LEFT JOIN FETCH m.firstPlayer
-        LEFT JOIN FETCH m.secondPlayer
-        LEFT JOIN FETCH m.winner
-    """;
-    private static final String FILTER_BY_NAME_HQL = " WHERE m.firstPlayer.name = :name OR m.secondPlayer.name = :name";
+                SELECT DISTINCT m
+                FROM Match m
+                LEFT JOIN FETCH m.firstPlayer
+                LEFT JOIN FETCH m.secondPlayer
+                LEFT JOIN FETCH m.winner
+            """;
+    private static final String FILTER_BY_NAME_HQL = " WHERE LOWER(m.firstPlayer.name) LIKE LOWER(:name) OR LOWER(m.secondPlayer.name) LIKE LOWER(:name)";
     private static final String FIND_ALL_BY_PLAYER_HQL = FIND_ALL_HQL + FILTER_BY_NAME_HQL;
     private static final String COUNT_ALL_HQL = "SELECT COUNT(DISTINCT m) FROM Match m";
     private static final String COUNT_ALL_BY_PLAYER_HQL = COUNT_ALL_HQL + FILTER_BY_NAME_HQL;
@@ -26,7 +26,7 @@ public class MatchRepositoryImpl extends BaseRepository<Match> implements MatchR
     public List<Match> findAllByPlayer(String name, int limit, int offset) {
         return HibernateManager.getSession()
                 .createQuery(FIND_ALL_BY_PLAYER_HQL, Match.class)
-                .setParameter("name", name)
+                .setParameter("name", "%" + name + "%")
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .getResultList();
@@ -43,7 +43,7 @@ public class MatchRepositoryImpl extends BaseRepository<Match> implements MatchR
     public long countAllByPlayer(String name) {
         return HibernateManager.getSession()
                 .createQuery(COUNT_ALL_BY_PLAYER_HQL, Long.class)
-                .setParameter("name", name)
+                .setParameter("name", "%" + name + "%")
                 .uniqueResult();
     }
 }
