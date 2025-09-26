@@ -13,7 +13,8 @@ public class MatchRepositoryImpl extends BaseRepository<Match> implements MatchR
                 LEFT JOIN FETCH m.secondPlayer
                 LEFT JOIN FETCH m.winner
             """;
-    private static final String FILTER_BY_NAME_HQL = " WHERE LOWER(m.firstPlayer.name) LIKE LOWER(:name) OR LOWER(m.secondPlayer.name) LIKE LOWER(:name)";
+    private static final String FILTER_BY_NAME_HQL =
+            " WHERE LOWER(m.firstPlayer.name) LIKE LOWER(:name) OR LOWER(m.secondPlayer.name) LIKE LOWER(:name)";
     private static final String FIND_ALL_BY_PLAYER_HQL = FIND_ALL_HQL + FILTER_BY_NAME_HQL;
     private static final String COUNT_ALL_HQL = "SELECT COUNT(DISTINCT m) FROM Match m";
     private static final String COUNT_ALL_BY_PLAYER_HQL = COUNT_ALL_HQL + FILTER_BY_NAME_HQL;

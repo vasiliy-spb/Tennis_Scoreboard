@@ -42,9 +42,15 @@ public class NewMatchServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String firstPlayerName = req.getParameter("firstPlayerName");
+        String secondPlayerName = req.getParameter("secondPlayerName");
+
+        setAttribute("firstPlayerName", firstPlayerName, req);
+        setAttribute("secondPlayerName", secondPlayerName, req);
+
         CreateMatchRequestDto requestDto = new CreateMatchRequestDto(
-                req.getParameter("firstPlayerName"),
-                req.getParameter("secondPlayerName")
+                firstPlayerName,
+                secondPlayerName
         );
 
         validate(requestDto);
@@ -52,6 +58,10 @@ public class NewMatchServlet extends HttpServlet {
         UUID matchId = matchService.add(requestDto);
 
         resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + matchId);
+    }
+
+    private void setAttribute(String attribute, String value, HttpServletRequest req) {
+        req.setAttribute(attribute, value != null ? value : "");
     }
 
     private void validate(CreateMatchRequestDto requestDto) {

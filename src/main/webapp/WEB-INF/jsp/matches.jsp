@@ -45,7 +45,7 @@
       <form method="get" action="${pageContext.request.contextPath}/matches" class="filter-form">
         <div class="filter-group">
           <input class="input-filter" type="text" name="filter_by_player_name"
-                 placeholder="Filter by name" value="${filter}"/>
+                 placeholder="Filter by name" value="<c:out value='${filter}'/>"/>
           <div class="button-group">
             <button class="btn-filter" type="submit">Filter</button>
             <a href="${pageContext.request.contextPath}/matches" class="btn-filter reset-btn">Reset</a>
@@ -65,9 +65,9 @@
       <tbody>
         <c:forEach var="m" items="${matches}">
           <tr>
-            <td>${m.firstPlayer.name}</td>
-            <td>${m.secondPlayer.name}</td>
-            <td>${m.winner.name}</td>
+            <td><c:out value='${m.firstPlayer.name}'/></td>
+            <td><c:out value='${m.secondPlayer.name}'/></td>
+            <td><c:out value='${m.winner.name}'/></td>
           </tr>
         </c:forEach>
         <c:if test="${fn:length(matches) == 0}">
@@ -85,10 +85,13 @@
           <div class="pagination">
               <!-- Кнопка "Предыдущая" -->
               <c:if test="${currentPage > 1}">
-                  <a class="pagination-btn prev-btn"
-                     href="${pageContext.request.contextPath}/matches?page=${currentPage - 1}&filter_by_player_name=${fn:escapeXml(filter)}">
-                      < Prev
-                  </a>
+
+                  <c:url var="pageUrl" value="/matches">
+                      <c:param name="page" value="${currentPage - 1}"/>
+                      <c:param name="filter_by_player_name" value="${filter}"/>
+                  </c:url>
+                  <a class="pagination-btn prev-btn" href="${pageUrl}">< Prev</a>
+
               </c:if>
 
               <!-- Умная нумерация страниц -->
@@ -101,7 +104,13 @@
                                   <span class="pagination-btn current-page">${pageNum}</span>
                               </c:when>
                               <c:otherwise>
-                                  <a class="pagination-btn" href="${pageContext.request.contextPath}/matches?page=${pageNum}&filter_by_player_name=${fn:escapeXml(filter)}">${pageNum}</a>
+
+                                  <c:url var="pageUrl" value="/matches">
+                                      <c:param name="page" value="${pageNum}"/>
+                                      <c:param name="filter_by_player_name" value="${filter}"/>
+                                  </c:url>
+                                  <a class="pagination-btn" href="${pageUrl}">${pageNum}</a>
+
                               </c:otherwise>
                           </c:choose>
                       </c:forEach>
@@ -114,7 +123,11 @@
                               <span class="pagination-btn current-page">1</span>
                           </c:when>
                           <c:otherwise>
-                              <a class="pagination-btn" href="${pageContext.request.contextPath}/matches?page=1&filter_by_player_name=${fn:escapeXml(filter)}">1</a>
+                              <c:url var="pageUrl" value="/matches">
+                                  <c:param name="page" value="1"/>
+                                  <c:param name="filter_by_player_name" value="${filter}"/>
+                              </c:url>
+                              <a class="pagination-btn" href="${pageUrl}">1</a>
                           </c:otherwise>
                       </c:choose>
 
@@ -130,7 +143,11 @@
                                   <span class="pagination-btn current-page">${pageNum}</span>
                               </c:when>
                               <c:otherwise>
-                                  <a class="pagination-btn" href="${pageContext.request.contextPath}/matches?page=${pageNum}&filter_by_player_name=${fn:escapeXml(filter)}">${pageNum}</a>
+                                  <c:url var="pageUrl" value="/matches">
+                                      <c:param name="page" value="${pageNum}"/>
+                                      <c:param name="filter_by_player_name" value="${filter}"/>
+                                  </c:url>
+                                  <a class="pagination-btn" href="${pageUrl}">${pageNum}</a>
                               </c:otherwise>
                           </c:choose>
                       </c:forEach>
@@ -145,7 +162,11 @@
                               <span class="pagination-btn current-page">${totalPages}</span>
                           </c:when>
                           <c:otherwise>
-                              <a class="pagination-btn" href="${pageContext.request.contextPath}/matches?page=${totalPages}&filter_by_player_name=${fn:escapeXml(filter)}">${totalPages}</a>
+                              <c:url var="pageUrl" value="/matches">
+                                  <c:param name="page" value="${totalPages}"/>
+                                  <c:param name="filter_by_player_name" value="${filter}"/>
+                              </c:url>
+                              <a class="pagination-btn" href="${pageUrl}">${totalPages}</a>
                           </c:otherwise>
                       </c:choose>
                   </c:otherwise>
@@ -153,10 +174,13 @@
 
               <!-- Кнопка "Следующая" -->
               <c:if test="${currentPage < totalPages}">
-                  <a class="pagination-btn next-btn"
-                     href="${pageContext.request.contextPath}/matches?page=${currentPage + 1}&filter_by_player_name=${fn:escapeXml(filter)}">
-                      Next >
-                  </a>
+
+                  <c:url var="pageUrl" value="/matches">
+                      <c:param name="page" value="${currentPage + 1}"/>
+                      <c:param name="filter_by_player_name" value="${filter}"/>
+                  </c:url>
+                  <a class="pagination-btn next-btn" href="${pageUrl}">Next ></a>
+
               </c:if>
           </div>
       </c:if>
