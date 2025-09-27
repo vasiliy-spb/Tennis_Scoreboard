@@ -7,20 +7,29 @@ import java.util.List;
 
 public class MatchRepositoryImpl extends BaseRepository<Match> implements MatchRepository {
     private static final String FIND_ALL_HQL = """
-                SELECT DISTINCT m
-                FROM Match m
-                LEFT JOIN FETCH m.firstPlayer
-                LEFT JOIN FETCH m.secondPlayer
-                LEFT JOIN FETCH m.winner
+            SELECT DISTINCT m
+            FROM Match m
+            LEFT JOIN FETCH m.firstPlayer fp
+            LEFT JOIN FETCH m.secondPlayer sp
+            LEFT JOIN FETCH m.winner
             """;
-    private static final String FILTER_BY_NAME_HQL =
-            " WHERE LOWER(m.firstPlayer.name) LIKE LOWER(:name) OR LOWER(m.secondPlayer.name) LIKE LOWER(:name)";
-    private static final String FIND_ALL_BY_PLAYER_HQL = FIND_ALL_HQL + FILTER_BY_NAME_HQL;
-    private static final String COUNT_ALL_HQL = "SELECT COUNT(DISTINCT m) FROM Match m";
+    private static final String COUNT_ALL_HQL = """
+            SELECT COUNT(DISTINCT m) FROM Match m
+            LEFT JOIN m.firstPlayer fp
+            LEFT JOIN m.secondPlayer sp
+            """;
+    private static final String FILTER_BY_NAME_HQL = """
+            WHERE LOWER(fp.name) LIKE LOWER(:name) OR LOWER(sp.name) LIKE LOWER(:name)
+            """;
+
+    private static final String ORDER_HQL = """
+            ORDER BY m.id DESC
+            """;
+    private static final String FIND_ALL_BY_PLAYER_HQL = FIND_ALL_HQL + FILTER_BY_NAME_HQL + ORDER_HQL;
     private static final String COUNT_ALL_BY_PLAYER_HQL = COUNT_ALL_HQL + FILTER_BY_NAME_HQL;
 
     public MatchRepositoryImpl() {
-        super(FIND_ALL_HQL, Match.class);
+        super(FIND_ALL_HQL + ORDER_HQL, Match.class);
     }
 
     @Override
