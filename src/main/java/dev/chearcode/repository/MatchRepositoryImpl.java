@@ -34,9 +34,10 @@ public class MatchRepositoryImpl extends BaseRepository<Match> implements MatchR
 
     @Override
     public List<Match> findAllByPlayer(String name, int limit, int offset) {
+        String nameArgument = "%" + escapeSqlWildcard(name) + "%";
         return HibernateManager.getSession()
                 .createQuery(FIND_ALL_BY_PLAYER_HQL, Match.class)
-                .setParameter("name", "%" + name + "%")
+                .setParameter("name", nameArgument)
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .getResultList();
@@ -51,9 +52,16 @@ public class MatchRepositoryImpl extends BaseRepository<Match> implements MatchR
 
     @Override
     public long countAllByPlayer(String name) {
+        String nameArgument = "%" + escapeSqlWildcard(name) + "%";
         return HibernateManager.getSession()
                 .createQuery(COUNT_ALL_BY_PLAYER_HQL, Long.class)
-                .setParameter("name", "%" + name + "%")
+                .setParameter("name", nameArgument)
                 .uniqueResult();
+    }
+
+    private String escapeSqlWildcard(String input) {
+        return input.replace("\\", "\\\\")
+                .replace("%", "\\%")
+                .replace("_", "\\_");
     }
 }
