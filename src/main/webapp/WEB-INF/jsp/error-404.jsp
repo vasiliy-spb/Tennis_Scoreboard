@@ -84,7 +84,8 @@
             <div class="error-code">404</div>
             <h1 class="error-message">Page Not Found</h1>
             <p class="error-description">
-                The page you are looking isn't exists. If you want to create it, then <a href="https://github.com/vasiliy-spb/Tennis_Scoreboard">here</a> is the source code
+                The page you are looking isn't exists. If you want to create it, then <a
+                    href="https://github.com/vasiliy-spb/Tennis_Scoreboard">here</a> is the source code
             </p>
             <div class="error-image">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
@@ -101,9 +102,9 @@
 <footer>
     <div class="footer">
         <p>&copy; Tennis Scoreboard, project from
-           <a href="https://zhukovsd.github.io/java-backend-learning-course/">
-               zhukovsd/java-backend-learning-course
-           </a> roadmap.
+            <a href="https://zhukovsd.github.io/java-backend-learning-course/">
+                zhukovsd/java-backend-learning-course
+            </a> roadmap.
         </p>
     </div>
 </footer>

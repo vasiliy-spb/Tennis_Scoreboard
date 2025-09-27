@@ -42,15 +42,15 @@
 
                     <label class="label-player" for="playerOne">Player one</label>
                     <input class="input-player" placeholder="Name" type="text"
-                    name="firstPlayerName"
-                    value="<c:out value='${firstPlayerName}'/>"
-                    required title="Enter a name">
+                           name="firstPlayerName"
+                           value="<c:out value='${firstPlayerName}'/>"
+                           required title="Enter a name">
 
                     <label class="label-player" for="playerTwo">Player two</label>
                     <input class="input-player" placeholder="Name" type="text"
-                    name="secondPlayerName"
-                    value="<c:out value='${secondPlayerName}'/>"
-                    required title="Enter a name">
+                           name="secondPlayerName"
+                           value="<c:out value='${secondPlayerName}'/>"
+                           required title="Enter a name">
 
                     <input class="form-button" type="submit" value="Start">
                 </form>
@@ -60,7 +60,8 @@
 </main>
 <footer>
     <div class="footer">
-        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a> roadmap.</p>
+        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a>
+            roadmap.</p>
     </div>
 </footer>
 </body>
