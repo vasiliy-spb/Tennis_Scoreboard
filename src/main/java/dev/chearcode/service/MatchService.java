@@ -39,7 +39,7 @@ public class MatchService {
 
     private Player createPlayer(String name) {
         Player player = new Player(name);
-        UUID id = playerRepository.save(player);
+        Long id = playerRepository.save(player);
         player.setId(id);
         return player;
     }

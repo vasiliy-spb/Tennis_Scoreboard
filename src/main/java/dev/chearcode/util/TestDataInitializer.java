@@ -5,7 +5,10 @@ import dev.chearcode.entity.Player;
 import dev.chearcode.repository.MatchRepository;
 import dev.chearcode.repository.PlayerRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TestDataInitializer {
@@ -40,7 +43,7 @@ public class TestDataInitializer {
 
     private Player createPlayer(String name) {
         Player player = new Player(name);
-        UUID id = playerRepository.save(player);
+        Long id = playerRepository.save(player);
         player.setId(id);
         return player;
     }

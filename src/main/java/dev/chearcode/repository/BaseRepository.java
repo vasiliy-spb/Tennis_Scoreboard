@@ -4,7 +4,6 @@ import dev.chearcode.config.HibernateManager;
 import dev.chearcode.entity.BaseEntity;
 
 import java.util.List;
-import java.util.UUID;
 
 public abstract class BaseRepository<E extends BaseEntity> implements EntityRepository<E> {
     private final String findAllHql;
@@ -25,7 +24,7 @@ public abstract class BaseRepository<E extends BaseEntity> implements EntityRepo
     }
 
     @Override
-    public UUID save(E entity) {
+    public Long save(E entity) {
         HibernateManager.getSession()
                 .persist(entity);
         return entity.getId();

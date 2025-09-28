@@ -4,6 +4,7 @@ import dev.chearcode.config.ContextAttribute;
 import dev.chearcode.entity.Match;
 import dev.chearcode.entity.Player;
 import dev.chearcode.exception.EntityNotFoundException;
+import dev.chearcode.exception.ValidationException;
 import dev.chearcode.model.TennisMatch;
 import dev.chearcode.repository.MatchRepository;
 import dev.chearcode.service.OngoingMatchesService;
@@ -94,7 +95,7 @@ public class MatchScoreServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UUID matchId = getUuidParam("uuid", req);
-        UUID playerId = getUuidParam("playerId", req);
+        Long playerId = getLongParam("playerId", req);
 
         TennisMatch tennisMatch = getOngoingMatch(matchId);
 
@@ -107,6 +108,14 @@ public class MatchScoreServlet extends HttpServlet {
         refreshPage(req, resp);
     }
 
+    private long getLongParam(String param, HttpServletRequest req) {
+        try {
+            return Long.parseLong(req.getParameter(param));
+        } catch (NumberFormatException e) {
+            throw new ValidationException("Incorrect user id");
+        }
+    }
+
     private void processWinningPoint(Player player, TennisMatch tennisMatch, UUID matchId) {
         ongoingMatchesService.pointWonBy(matchId, player);
 
@@ -116,8 +125,8 @@ public class MatchScoreServlet extends HttpServlet {
         }
     }
 
-    private Player definePointWinner(TennisMatch tennisMatch, UUID playerId) {
-        Map<UUID, Player> players = Map.of(
+    private Player definePointWinner(TennisMatch tennisMatch, Long playerId) {
+        Map<Long, Player> players = Map.of(
                 tennisMatch.getFirstPlayer().getId(), tennisMatch.getFirstPlayer(),
                 tennisMatch.getSecondPlayer().getId(), tennisMatch.getSecondPlayer()
         );

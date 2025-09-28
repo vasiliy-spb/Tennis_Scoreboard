@@ -1,29 +1,22 @@
 package dev.chearcode.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import org.hibernate.annotations.UuidGenerator;
-
-import java.util.UUID;
+import jakarta.persistence.*;
 
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id
-    @GeneratedValue
-    @UuidGenerator
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
-    protected UUID id;
+    protected Long id;
 
     public BaseEntity() {
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

@@ -19,9 +19,9 @@ public class TieBreakTests {
     @BeforeEach
     protected void init() {
         player1 = new Player("Player_1");
-        player1.setId(UUID.randomUUID());
+        player1.setId(1L);
         player2 = new Player("Player_2");
-        player2.setId(UUID.randomUUID());
+        player2.setId(2L);
         game = new TieBreak(player1, player2);
     }
 

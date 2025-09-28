@@ -1,12 +1,13 @@
 package model;
 
 import dev.chearcode.entity.Player;
-import dev.chearcode.model.*;
+import dev.chearcode.model.TennisLevel;
+import dev.chearcode.model.TennisSet;
+import dev.chearcode.model.TieBreak;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,9 +19,9 @@ public class TennisSetTests {
     @BeforeEach
     protected void init() {
         player1 = new Player("Player_1");
-        player1.setId(UUID.randomUUID());
+        player1.setId(1L);
         player2 = new Player("Player_2");
-        player2.setId(UUID.randomUUID());
+        player2.setId(2L);
         tennisSet = new TennisSet(player1, player2);
     }
 
