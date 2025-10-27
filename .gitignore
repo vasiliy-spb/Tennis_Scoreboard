@@ -42,3 +42,5 @@ gradle/
 
 ### Mac OS ###
 .DS_Store
+
+hibernate.properties
